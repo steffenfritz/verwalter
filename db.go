@@ -10,19 +10,21 @@ import (
 )
 
 // createDB creates a local database with all tables needed by verwalter
-func createDB(filename string) {
+func createDB(homedir string) {
 
+	dbpath := homedir + "/.verwalter/verwalter.db"
 	// check if file exists. If error nil, we quit.
-	_, err := os.Stat(filename)
+	_, err := os.Stat(dbpath)
 	if err == nil {
 		log.Fatal("Database already exists. Quitting.")
 		return
 	}
 
 	log.Println("Creating database")
-	log.Println("Path: " + filename)
+	os.Mkdir(homedir+"/.verwalter", 0700)
+	log.Println("Path: " + dbpath)
 
-	db, err := sql.Open("sqlite", filename)
+	db, err := sql.Open("sqlite3", dbpath+"?foreign_keys=ON")
 	e(err)
 	defer db.Close()
 
@@ -35,7 +37,6 @@ func createDB(filename string) {
 	// osversion names the version of the operating system
 	// lastosupdate gives the date of the last operating system update. Format: yyyy-mm-dd
 	// zone names the one where the asset resides, e.g. DMZ
-	// services lists services on the host by name or port and proto, e.g. http or 443/tcp
 	// reachableFrom lists zones from where a service is reachable as a tuple, e.g. (internet, http) or (intern, tcp/443)
 	// reaches lists which zones/hosts and services the host can reach, e.g. (internet, http) or (10.0.1.1, tcp/443)
 	// active marks an asset as active or not. Due to sqlite3 lack of a BOOL we use INTEGER
@@ -53,15 +54,40 @@ func createDB(filename string) {
 		osversion TEXT,
 		lastosupdate TEXT,
 		zone TEXT,
-		services TEXT,
 		reachableFrom TEXT,
 		reaches TEXT,
 		active INTEGER,
 		vulnerable TEXT,
-		redundancy TEXT,
+		redundancy INTEGER REFERENCES assets(id),
 		responsibles TEXT
 	);`
 	_, err = db.Exec(sqlStmt)
+	e(err)
+	// services is for network services
+	sqlStmt = `create table services(id INTEGER NOT NULL PRIMARY KEY, 
+		servicename TEXT,
+		port INTEGER
+	);`
+	_, err = db.Exec(sqlStmt)
+	e(err)
+
+	// zones is for zone names
+	sqlStmt = `create table zones(id INTEGER NOT NULL PRIMARY KEY, 
+		zonename TEXT
+	);`
+	_, err = db.Exec(sqlStmt)
+	e(err)
+
+	// host_service is a relation table for host to service
+	sqlStmt = `create table host_service(id INTEGER NOT NULL PRIMARY KEY, 
+		hostid INTEGER,
+		FOREIGN KEY(hostid) REFERENCES assets(id),
+		serviceid INTEGER,
+		FOREIGN KEY(serviceid) REFERENCES services(id),
+		active INTEGER
+	);`
+	_, err = db.Exec(sqlStmt)
+	e(err)
 
 	// NOTE: If something changed in the persons's dates,
 	//       a new entry for the same person is created
@@ -94,6 +120,7 @@ func createDB(filename string) {
 	);`
 
 	_, err = db.Exec(sqlStmt)
+	e(err)
 
 	// id is the row id
 	// descname is a descriptive name
@@ -111,4 +138,7 @@ func createDB(filename string) {
 		validFrom TEXT,
 		validTo TEXT,
 	);`
+
+	_, err = db.Exec(sqlStmt)
+	e(err)
 }
