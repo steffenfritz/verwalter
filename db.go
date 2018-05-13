@@ -37,13 +37,8 @@ func createDB(homedir string) {
 	// osversion names the version of the operating system
 	// lastosupdate gives the date of the last operating system update. Format: yyyy-mm-dd
 	// zone names the one where the asset resides, e.g. DMZ
-	// reachableFrom lists zones from where a service is reachable as a tuple, e.g. (internet, http) or (intern, tcp/443)
-	// reaches lists which zones/hosts and services the host can reach, e.g. (internet, http) or (10.0.1.1, tcp/443)
 	// active marks an asset as active or not. Due to sqlite3 lack of a BOOL we use INTEGER
-	// vulnerable lists vulnerable packages/services. If services or packages are vulnerable, they are listed here.
-	//   So if not null, host is vulnerable.
-	// redundancy lists hosts that are redundant to the host. If null, host and its services have no redundancy
-	// responsibles lists functions ids that are responsible for the host and its services
+	// responsible references a function that is responsible for the host as a service
 
 	sqlStmt := `create table assets(id INTEGER NOT NULL PRIMARY KEY, 
 		descname TEXT,
@@ -54,12 +49,9 @@ func createDB(homedir string) {
 		osversion TEXT,
 		lastosupdate TEXT,
 		zone TEXT,
-		reachableFrom TEXT,
-		reaches TEXT,
 		active INTEGER,
-		vulnerable TEXT,
-		redundancy INTEGER REFERENCES assets(id),
-		responsibles TEXT
+		responsible INTEGER,
+		  FOREIGN KEY (responsible) REFERENCES functions(id)
 	);`
 	_, err = db.Exec(sqlStmt)
 	e(err)
@@ -81,11 +73,45 @@ func createDB(homedir string) {
 	// host_service is a relation table for host to service
 	sqlStmt = `create table host_service(id INTEGER NOT NULL PRIMARY KEY, 
 		hostid INTEGER,
-		FOREIGN KEY(hostid) REFERENCES assets(id),
 		serviceid INTEGER,
-		FOREIGN KEY(serviceid) REFERENCES services(id),
-		active INTEGER
+		active INTEGER,
+		  FOREIGN KEY(hostid) REFERENCES assets(id),
+		  FOREIGN KEY(serviceid) REFERENCES services(id)
 	);`
+	_, err = db.Exec(sqlStmt)
+	e(err)
+
+	// reachable_from is a relation table for zones and hosts to host_service
+	sqlStmt = `create table reachable_from(id INTEGER NOT NULL PRIMARY KEY,
+		zoneid INTEGER,
+		hostid INTEGER,
+		host_service_id INTEGER,
+		  FOREIGN KEY (zoneid) REFERENCES zones(id),
+		  FOREIGN KEY (hostid) REFERENCES assets(id),
+		  FOREIGN KEY (host_service_id) REFERENCES host_service(id)
+	);`
+	_, err = db.Exec(sqlStmt)
+	e(err)
+
+	// reaches is a relation table for host_service to zones and hosts
+	sqlStmt = `create table reaches(id INTEGER NOT NULL PRIMARY KEY, 
+		host_service_id INTEGER,
+		zoneid INTEGER,
+		hostid INTEGER,
+		  FOREIGN KEY (host_service_id) REFERENCES host_service(id),
+		  FOREIGN KEY (zoneid) REFERENCES zones(id),
+		  FOREIGN KEY (hostid) REFERENCES assets(id)
+	);`
+	_, err = db.Exec(sqlStmt)
+	e(err)
+
+	// redundancy is a relation table for host_service to host_service
+	sqlStmt = `create table redundancy (id INTEGER NOT NULL PRIMARY KEY, 
+		host_service_id INTEGER,
+		redundant_host_service INTEGER,
+		  FOREIGN KEY (host_service_id) REFERENCES host_service(id),
+		  FOREIGN KEY (redundant_host_service) REFERENCES host_service(id)
+		);`
 	_, err = db.Exec(sqlStmt)
 	e(err)
 
@@ -126,7 +152,6 @@ func createDB(homedir string) {
 	// descname is a descriptive name
 	// responsibleName gives the name of a responsible person for the function
 	// most fields are self-descriptive
-
 	sqlStmt = `create table functions (id INTEGER NOT NULL PRIMARY KEY,
 		descname TEXT,
 		landline TEXT,
@@ -136,9 +161,22 @@ func createDB(homedir string) {
 		responsibleMiddleName TEXT,
 		responsibleLastName TEXT,
 		validFrom TEXT,
-		validTo TEXT,
+		validTo TEXT
 	);`
 
+	_, err = db.Exec(sqlStmt)
+	e(err)
+
+	// vulns keeps record of all found vulnerable services
+	// cve gives the cve identifier
+	sqlStmt = `create table vulns (id INTEGER NOT NULL PRIMARY KEY,
+		host_service_id INTEGER,
+		cve TEXT,
+		foundDate TEXT,
+		workaroundDate TEXT,
+		fixedDate TEXT,
+		  FOREIGN KEY (host_service_id) REFERENCES host_service(id)
+	);`
 	_, err = db.Exec(sqlStmt)
 	e(err)
 }
