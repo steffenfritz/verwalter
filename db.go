@@ -55,6 +55,7 @@ func createDB(homedir string) {
 	);`
 	_, err = db.Exec(sqlStmt)
 	e(err)
+
 	// services is for network services
 	sqlStmt = `create table services(id INTEGER NOT NULL PRIMARY KEY, 
 		servicename TEXT,

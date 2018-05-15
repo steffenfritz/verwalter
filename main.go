@@ -2,6 +2,8 @@ package main
 
 import (
 	"flag"
+	"log"
+	"os"
 	"os/user"
 )
 
@@ -15,5 +17,14 @@ func main() {
 
 	if *initdb {
 		createDB(usr.HomeDir)
+		log.Println("Created database.")
+		log.Println("You can now start the application by starting 'verwalter'")
+		os.Exit(0)
 	}
+
+	log.Println("Please visit http://127.0.0.1:8666")
+	log.Println("Trying to open your default browser")
+	serv()
+	openbrowser("http://127.0.0.1:8666")
+
 }
