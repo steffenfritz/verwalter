@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"os/exec"
@@ -47,5 +48,8 @@ func openbrowser(url string) {
 
 // HomeHandler handles requests to root
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "<html> test </html>")
+	// TODO: Generic path
+	tmpl, err := template.ParseFiles("templates/index.tmpl")
+	e(err)
+	tmpl.Execute(w, "")
 }

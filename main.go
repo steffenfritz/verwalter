@@ -24,7 +24,7 @@ func main() {
 
 	log.Println("Please visit http://127.0.0.1:8666")
 	log.Println("Trying to open your default browser")
-	serv()
 	openbrowser("http://127.0.0.1:8666")
+	serv()
 
 }
