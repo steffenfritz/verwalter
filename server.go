@@ -16,6 +16,14 @@ func serv() {
 	r := mux.NewRouter()
 
 	r.HandleFunc("/", HomeHandler)
+	r.HandleFunc("/assets", Assets)
+	r.HandleFunc("/networks", Networks)
+	r.HandleFunc("/persons", Persons)
+	r.HandleFunc("/policies", Policies)
+	r.HandleFunc("/vulns", Vulns)
+	r.HandleFunc("/secincident", Secincident)
+	r.HandleFunc("/processes", Processes)
+	r.HandleFunc("/reports", Reports)
 
 	srv := &http.Server{
 		Handler:      r,
@@ -50,6 +58,70 @@ func openbrowser(url string) {
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	// TODO: Generic path
 	tmpl, err := template.ParseFiles("templates/index.tmpl")
+	e(err)
+	tmpl.Execute(w, "")
+}
+
+// Assets handles requests to assets
+func Assets(w http.ResponseWriter, r *http.Request) {
+	// TODO: Generic path
+	tmpl, err := template.ParseFiles("templates/assets.tmpl")
+	e(err)
+	tmpl.Execute(w, "")
+}
+
+// Networks handles requests to networks
+func Networks(w http.ResponseWriter, r *http.Request) {
+	// TODO: Generic path
+	tmpl, err := template.ParseFiles("templates/networks.tmpl")
+	e(err)
+	tmpl.Execute(w, "")
+}
+
+// Persons handles requests to persons
+func Persons(w http.ResponseWriter, r *http.Request) {
+	// TODO: Generic path
+	tmpl, err := template.ParseFiles("templates/persons.tmpl")
+	e(err)
+	tmpl.Execute(w, "")
+}
+
+// Policies handles requests to policies
+func Policies(w http.ResponseWriter, r *http.Request) {
+	// TODO: Generic path
+	tmpl, err := template.ParseFiles("templates/policies.tmpl")
+	e(err)
+	tmpl.Execute(w, "")
+}
+
+// Vulns handles requests to vulns
+func Vulns(w http.ResponseWriter, r *http.Request) {
+	// TODO: Generic path
+	tmpl, err := template.ParseFiles("templates/vulnerables.tmpl")
+	e(err)
+	tmpl.Execute(w, "")
+}
+
+// Secincident handles requests to secincident
+func Secincident(w http.ResponseWriter, r *http.Request) {
+	// TODO: Generic path
+	tmpl, err := template.ParseFiles("templates/secincident.tmpl")
+	e(err)
+	tmpl.Execute(w, "")
+}
+
+// Processes handles requests to processes
+func Processes(w http.ResponseWriter, r *http.Request) {
+	// TODO: Generic path
+	tmpl, err := template.ParseFiles("templates/processes.tmpl")
+	e(err)
+	tmpl.Execute(w, "")
+}
+
+// Reports handles requests to reports
+func Reports(w http.ResponseWriter, r *http.Request) {
+	// TODO: Generic path
+	tmpl, err := template.ParseFiles("templates/reports.tmpl")
 	e(err)
 	tmpl.Execute(w, "")
 }
