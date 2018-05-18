@@ -68,6 +68,14 @@ func Assets(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("templates/assets.tmpl")
 	e(err)
 	tmpl.Execute(w, "")
+
+	err = r.ParseForm()
+	e(err)
+	aname := r.Form.Get("aname")
+	apurpose := r.Form.Get("apurpose")
+
+	println(aname)
+	println(apurpose)
 }
 
 // Networks handles requests to networks
