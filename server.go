@@ -16,7 +16,9 @@ func serv() {
 	r := mux.NewRouter()
 
 	r.HandleFunc("/", HomeHandler)
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 	r.HandleFunc("/assets", Assets)
+	r.HandleFunc("/saveasset", SaveAsset)
 	r.HandleFunc("/networks", Networks)
 	r.HandleFunc("/persons", Persons)
 	r.HandleFunc("/policies", Policies)
@@ -65,17 +67,33 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 // Assets handles requests to assets
 func Assets(w http.ResponseWriter, r *http.Request) {
 	// TODO: Generic path
+
 	tmpl, err := template.ParseFiles("templates/assets.tmpl")
 	e(err)
 	tmpl.Execute(w, "")
+}
 
-	err = r.ParseForm()
+// SaveAsset saves new asset entry to database if valid
+func SaveAsset(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
 	e(err)
 	aname := r.Form.Get("aname")
+	aaddress := r.Form.Get("aaddress")
+	ahostname := r.Form.Get("ahostname")
 	apurpose := r.Form.Get("apurpose")
+	aos := r.Form.Get("aos")
+	aosversion := r.Form.Get("aosversion")
+	aosupdate := r.Form.Get("aosupdate")
+	azone := r.Form.Get("azone")
 
-	println(aname)
-	println(apurpose)
+	print(aname)
+	print(aaddress)
+	print(ahostname)
+	print(apurpose)
+	print(aos)
+	print(aosversion)
+	print(aosupdate)
+	print(azone)
 }
 
 // Networks handles requests to networks
