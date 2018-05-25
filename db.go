@@ -9,6 +9,17 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+var db *sql.DB
+
+func connpool(homedir string) {
+	dbpath := homedir + "/.verwalter/verwalter.db"
+
+	var err error
+	db, err = sql.Open("sqlite3", dbpath)
+	e(err)
+	defer db.Close()
+}
+
 // createDB creates a local database with all tables needed by verwalter
 func createDB(homedir string) {
 

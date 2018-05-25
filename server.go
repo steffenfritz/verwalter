@@ -86,14 +86,10 @@ func SaveAsset(w http.ResponseWriter, r *http.Request) {
 	aosupdate := r.Form.Get("aosupdate")
 	azone := r.Form.Get("azone")
 
-	print(aname)
-	print(aaddress)
-	print(ahostname)
-	print(apurpose)
-	print(aos)
-	print(aosversion)
-	print(aosupdate)
-	print(azone)
+	sqlStmt, err := db.Prepare("insert into assets values(?,?,?,?,?,?,?,?,?,?)")
+	e(err)
+	_, err = sqlStmt.Exec(nil, aname, aaddress, ahostname, apurpose, aos, aosversion, aosupdate, azone, 0)
+	e(err)
 }
 
 // Networks handles requests to networks
