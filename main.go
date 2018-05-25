@@ -22,9 +22,12 @@ func main() {
 		os.Exit(0)
 	}
 
+	connpool(usr.HomeDir)
+
 	log.Println("Please visit http://127.0.0.1:8666")
 	log.Println("Trying to open your default browser")
 	openbrowser("http://127.0.0.1:8666")
-	serv()
 
+	serv()
+	defer db.Close()
 }

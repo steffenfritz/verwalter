@@ -17,7 +17,6 @@ func connpool(homedir string) {
 	var err error
 	db, err = sql.Open("sqlite3", dbpath)
 	e(err)
-	defer db.Close()
 }
 
 // createDB creates a local database with all tables needed by verwalter
