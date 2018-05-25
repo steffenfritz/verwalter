@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"html/template"
 	"log"
@@ -75,7 +76,10 @@ func Assets(w http.ResponseWriter, r *http.Request) {
 
 // SaveAsset saves new asset entry to database if valid
 func SaveAsset(w http.ResponseWriter, r *http.Request) {
-	err := r.ParseForm()
+	// debug
+	db1, err := sql.Open("sqlite3", "/home/steffen/.verwalter/verwalter.db")
+
+	err = r.ParseForm()
 	e(err)
 	aname := r.Form.Get("aname")
 	aaddress := r.Form.Get("aaddress")
@@ -85,10 +89,15 @@ func SaveAsset(w http.ResponseWriter, r *http.Request) {
 	aosversion := r.Form.Get("aosversion")
 	aosupdate := r.Form.Get("aosupdate")
 	azone := r.Form.Get("azone")
+	aactive := r.Form.Get("azone")
 
-	sqlStmt, err := db.Prepare("insert into assets values(?,?,?,?,?,?,?,?,?,?)")
+	sqlStmt, err := db1.Prepare("insert into assets values(?,?,?,?,?,?,?,?,?,?,?)")
 	e(err)
-	_, err = sqlStmt.Exec(nil, aname, aaddress, ahostname, apurpose, aos, aosversion, aosupdate, azone, 0)
+
+	//debug
+	println("1")
+
+	_, err = sqlStmt.Exec(nil, aname, aaddress, ahostname, apurpose, aos, aosversion, aosupdate, azone, aactive, 0)
 	e(err)
 }
 
