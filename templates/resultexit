@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="static/menu.css">
+    </head>
+
+    <body>
+        <h1>verwalter</h1>
+
+         <ul>
+           <li><a href="assets">Assets</a></li>
+           <li><a href="networks">Networks</a></li>
+           <li><a href="persons">Persons</a></li>
+           <li><a href="policies">Policies</a></li>
+           <li><a href="vulns">Vulnerables</a></li>
+           <li><a href="secincident">Security Incident</a></li>
+           <li><a href="processes">Processes</a></li>
+           <li><a href="reports">Reports</a></li>
+        </ul>
+
+        {{ . }}
+
+    </body>
+</html>

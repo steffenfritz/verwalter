@@ -18,7 +18,9 @@ func serv() {
 	r.HandleFunc("/", HomeHandler)
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 	r.HandleFunc("/assets", Assets)
+	r.HandleFunc("/addasset", AddAsset)
 	r.HandleFunc("/saveasset", SaveAsset)
+	r.HandleFunc("/searchasset", SearchAsset)
 	r.HandleFunc("/networks", Networks)
 	r.HandleFunc("/persons", Persons)
 	r.HandleFunc("/policies", Policies)
@@ -66,9 +68,15 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 
 // Assets handles requests to assets
 func Assets(w http.ResponseWriter, r *http.Request) {
-	// TODO: Generic path
-
 	tmpl, err := template.ParseFiles("templates/assets.tmpl")
+	e(err)
+	tmpl.Execute(w, "")
+}
+
+// AddAsset handles requests to addasset
+func AddAsset(w http.ResponseWriter, r *http.Request) {
+	// TODO: Generic path
+	tmpl, err := template.ParseFiles("templates/addasset.tmpl")
 	e(err)
 	tmpl.Execute(w, "")
 }
@@ -93,7 +101,52 @@ func SaveAsset(w http.ResponseWriter, r *http.Request) {
 
 	_, err = sqlStmt.Exec(nil, aname, aaddress, ahostname, apurpose, aos, aosversion, aosupdate, azone, aactive, 0)
 	e(err)
+
+	result := ""
+	if err != nil {
+		result = "There was an error."
+	} else {
+		result = "Asset added"
+	}
+	tmpl, err := template.ParseFiles("templates/assets.tmpl")
+	e(err)
+	tmpl.Execute(w, result)
 }
+
+// SearchAsset handles requests to addasset
+func SearchAsset(w http.ResponseWriter, r *http.Request) {
+	// TODO: Generic path
+	tmpl, err := template.ParseFiles("templates/searchasset.tmpl")
+	e(err)
+	tmpl.Execute(w, "")
+}
+
+// AssetResult queries the database and prints the result as a list of links that gets by db id
+func AssetResult(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	e(err)
+
+	//aname := r.Form.Get("aname")
+	//aaddress := r.Form.Get("aaddress")
+	//ahostname := r.Form.Get("ahostname")
+	//apurpose := r.Form.Get("apurpose")
+	aos := r.Form.Get("aos")
+	//aosversion := r.Form.Get("aosversion")
+	//aosupdate := r.Form.Get("aosupdate")
+	//azone := r.Form.Get("azone")
+	//aactive := r.Form.Get("azone")
+
+	searchTerm := "aos = " + aos
+
+	sqlStmt, err := db.Prepare("select * from assets where " + searchTerm)
+	e(err)
+
+	_, err = sqlStmt.Exec()
+	e(err)
+}
+
+// ShowAsset shows a single asset entry
+func ShowAsset(w http.ResponseWriter, r *http.Request) {}
 
 // Networks handles requests to networks
 func Networks(w http.ResponseWriter, r *http.Request) {
