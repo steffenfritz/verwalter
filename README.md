@@ -3,7 +3,7 @@ A tool to manage the boring IT sec book-keeping tasks.
 
 # Installation
 
-go get github.com/steffenfritz/verwalter
+    go get github.com/steffenfritz/verwalter
 
 After installation create the database with `verwalter -init`
 
