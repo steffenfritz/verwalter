@@ -60,6 +60,8 @@ func createDB(homedir string) {
 		lastosupdate TEXT,
 		zone TEXT,
 		active INTEGER,
+		validFrom TEXT,
+		validTo TEXT,
 		responsible INTEGER,
 		  FOREIGN KEY (responsible) REFERENCES functions(id)
 	);`
@@ -86,6 +88,8 @@ func createDB(homedir string) {
 		hostid INTEGER,
 		serviceid INTEGER,
 		active INTEGER,
+		validFrom TEXT,
+		validTo TEXT,
 		  FOREIGN KEY(hostid) REFERENCES assets(id),
 		  FOREIGN KEY(serviceid) REFERENCES services(id)
 	);`
@@ -97,6 +101,8 @@ func createDB(homedir string) {
 		zoneid INTEGER,
 		hostid INTEGER,
 		host_service_id INTEGER,
+		validFrom TEXT,
+		validTo TEXT,
 		  FOREIGN KEY (zoneid) REFERENCES zones(id),
 		  FOREIGN KEY (hostid) REFERENCES assets(id),
 		  FOREIGN KEY (host_service_id) REFERENCES host_service(id)
@@ -109,6 +115,8 @@ func createDB(homedir string) {
 		host_service_id INTEGER,
 		zoneid INTEGER,
 		hostid INTEGER,
+		validFrom TEXT,
+		validTo TEXT,
 		  FOREIGN KEY (host_service_id) REFERENCES host_service(id),
 		  FOREIGN KEY (zoneid) REFERENCES zones(id),
 		  FOREIGN KEY (hostid) REFERENCES assets(id)
@@ -120,6 +128,8 @@ func createDB(homedir string) {
 	sqlStmt = `create table redundancy (id INTEGER NOT NULL PRIMARY KEY, 
 		host_service_id INTEGER,
 		redundant_host_service INTEGER,
+		validFrom TEXT,
+		validTo TEXT,
 		  FOREIGN KEY (host_service_id) REFERENCES host_service(id),
 		  FOREIGN KEY (redundant_host_service) REFERENCES host_service(id)
 		);`
