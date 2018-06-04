@@ -56,15 +56,15 @@ func SaveAsset(w http.ResponseWriter, r *http.Request) {
 	_, err = sqlStmt.Exec(nil, aname, aaddress, ahostname, apurpose, aos, aosversion, aosupdate, azone, aactive, 0)
 	e(err)
 
-	result := ""
+	Result := ""
 	if err != nil {
-		result = "There was an error."
+		Result = "There was an error."
 	} else {
-		result = "Asset added"
+		Result = "Asset added"
 	}
 	tmpl, err := template.ParseFiles("templates/assets.tmpl")
 	e(err)
-	tmpl.Execute(w, result)
+	tmpl.Execute(w, Result)
 }
 
 // SearchAsset handles requests to addasset
