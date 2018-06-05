@@ -38,6 +38,17 @@ func createDB(homedir string) {
 	e(err)
 	defer db.Close()
 
+	sqlStmt := `create table basesettings(id INTEGER NOT NULL PRIMARY KEY,
+		timezone TEXT,
+		processSched TEXT,
+		scriptLocation TEXT,
+		verwalterVersion TEXT,
+		dbVersion TEXT,
+		lang TEXT
+	)`
+	_, err = db.Exec(sqlStmt)
+	e(err)
+
 	// id is the row id
 	// descname is a descriptive name
 	// address is a address, e.g. IP or MAC
@@ -50,7 +61,7 @@ func createDB(homedir string) {
 	// active marks an asset as active or not. Due to sqlite3 lack of a BOOL we use INTEGER
 	// responsible references a function that is responsible for the host as a service
 
-	sqlStmt := `create table assets(id INTEGER NOT NULL PRIMARY KEY, 
+	sqlStmt = `create table assets(id INTEGER NOT NULL PRIMARY KEY, 
 		descname TEXT,
 		address TEXT,
 		hostname TEXT,
@@ -71,7 +82,9 @@ func createDB(homedir string) {
 	// services is for network services
 	sqlStmt = `create table services(id INTEGER NOT NULL PRIMARY KEY, 
 		servicename TEXT,
-		port INTEGER
+		port INTEGER,
+		license INTEGER,
+		  FOREIGN KEY(license) REFERENCES licenses(id)
 	);`
 	_, err = db.Exec(sqlStmt)
 	e(err)
@@ -165,7 +178,6 @@ func createDB(homedir string) {
 		wasID INTEGER,
 		hasAccessTo TEXT
 	);`
-
 	_, err = db.Exec(sqlStmt)
 	e(err)
 
@@ -173,7 +185,7 @@ func createDB(homedir string) {
 	// descname is a descriptive name
 	// responsibleName gives the name of a responsible person for the function
 	// most fields are self-descriptive
-	sqlStmt = `create table functions (id INTEGER NOT NULL PRIMARY KEY,
+	sqlStmt = `create table functions(id INTEGER NOT NULL PRIMARY KEY,
 		descname TEXT,
 		landline TEXT,
 		mobile TEXT,
@@ -184,13 +196,21 @@ func createDB(homedir string) {
 		validFrom TEXT,
 		validTo TEXT
 	);`
+	_, err = db.Exec(sqlStmt)
+	e(err)
 
+	sqlStmt = `create table vulnScan(id INTEGER NOT NULL PRIMARY KEY,
+		descname TEXT,
+		tool TEXT,
+		checkdateStart TEXT,
+		checkdateStop TEXT
+	);`
 	_, err = db.Exec(sqlStmt)
 	e(err)
 
 	// vulns keeps record of all found vulnerable services
 	// cve gives the cve identifier
-	sqlStmt = `create table vulns (id INTEGER NOT NULL PRIMARY KEY,
+	sqlStmt = `create table vulns(id INTEGER NOT NULL PRIMARY KEY,
 		host_service_id INTEGER,
 		cve TEXT,
 		foundDate TEXT,
@@ -200,4 +220,26 @@ func createDB(homedir string) {
 	);`
 	_, err = db.Exec(sqlStmt)
 	e(err)
+
+	sqlStmt = `create table downtime(id INTEGER NOT NULL PRIMARY KEY,
+		asset_id INTEGER,
+		startTime TEXT,
+		stopTime TEXT,
+		reason TEXT,
+		downtime TEXT,
+		downatm INTEGER		
+		  FOREIGN KEY (asset_id) REFERENCES assets(id)
+	)`
+	_, err = db.Exec(sqlStmt)
+	e(err)
+
+	sqlStmt = `create table licenses(id INTEGER NOT NULL PRIMARY KEY,
+		name TEXT,
+		hyperlink TEXT,
+		validFrom TEXT,
+		validTo TEXT
+	)`
+	_, err = db.Exec(sqlStmt)
+	e(err)
+
 }
