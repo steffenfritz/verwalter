@@ -40,11 +40,15 @@ func createDB(homedir string) {
 
 	sqlStmt := `create table basesettings(id INTEGER NOT NULL PRIMARY KEY,
 		timezone TEXT,
+		lang TEXT,
 		processSched TEXT,
 		scriptLocation TEXT,
 		verwalterVersion TEXT,
 		dbVersion TEXT,
-		lang TEXT
+		mailServer TEXT,
+		mailPort TEXT,
+		mailUser TEXT,
+		mailPass TEXT
 	)`
 	_, err = db.Exec(sqlStmt)
 	e(err)
