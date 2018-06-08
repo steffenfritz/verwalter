@@ -227,7 +227,7 @@ func createDB(homedir string) {
 		stopTime TEXT,
 		reason TEXT,
 		downtime TEXT,
-		downatm INTEGER		
+		downatm INTEGER,
 		  FOREIGN KEY (asset_id) REFERENCES assets(id)
 	)`
 	_, err = db.Exec(sqlStmt)

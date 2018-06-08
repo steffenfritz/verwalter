@@ -29,10 +29,11 @@ func Assets(w http.ResponseWriter, r *http.Request) {
 
 // AddAsset handles requests to addasset
 func AddAsset(w http.ResponseWriter, r *http.Request) {
+	today := "2018-01-01"
 	// TODO: Generic path
 	tmpl, err := template.ParseFiles("templates/addasset.tmpl")
 	e(err)
-	tmpl.Execute(w, "")
+	tmpl.Execute(w, today)
 }
 
 // SaveAsset saves new asset entry to database if valid
@@ -48,12 +49,14 @@ func SaveAsset(w http.ResponseWriter, r *http.Request) {
 	aosversion := r.Form.Get("aosversion")
 	aosupdate := r.Form.Get("aosupdate")
 	azone := r.Form.Get("azone")
-	aactive := r.Form.Get("azone")
+	aactive := r.Form.Get("aactive")
+	avalfrom := r.Form.Get("validFrom")
+	avalto := r.Form.Get("validTo")
 
-	sqlStmt, err := db.Prepare("insert into assets values(?,?,?,?,?,?,?,?,?,?,?)")
+	sqlStmt, err := db.Prepare("insert into assets values(?,?,?,?,?,?,?,?,?,?,?,?,?)")
 	e(err)
 
-	_, err = sqlStmt.Exec(nil, aname, aaddress, ahostname, apurpose, aos, aosversion, aosupdate, azone, aactive, 0)
+	_, err = sqlStmt.Exec(nil, aname, aaddress, ahostname, apurpose, aos, aosversion, aosupdate, azone, aactive, avalfrom, avalto, 0)
 	e(err)
 
 	Result := ""
