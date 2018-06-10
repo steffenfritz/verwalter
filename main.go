@@ -7,6 +7,9 @@ import (
 	"os/user"
 )
 
+// Staticpath sets the path to additional static ressources like css and templates
+var Staticpath string
+
 func main() {
 
 	usr, err := user.Current()
@@ -14,6 +17,8 @@ func main() {
 
 	initdb := flag.Bool("init", false, "initialize database")
 	flag.Parse()
+
+	Staticpath = usr.HomeDir + "/.verwalter"
 
 	if *initdb {
 		createDB(usr.HomeDir)

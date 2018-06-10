@@ -22,18 +22,18 @@ type Asset struct {
 
 // Assets handles requests to assets
 func Assets(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("templates/assets.tmpl")
+	tmpl, err := template.ParseFiles(Staticpath + "/templates/assets.tmpl")
 	e(err)
 	tmpl.Execute(w, "")
 }
 
 // AddAsset handles requests to addasset
 func AddAsset(w http.ResponseWriter, r *http.Request) {
-	today := "2018-01-01"
+	Today := "2018-01-01"
 	// TODO: Generic path
-	tmpl, err := template.ParseFiles("templates/addasset.tmpl")
+	tmpl, err := template.ParseFiles(Staticpath + "/templates/addasset.tmpl")
 	e(err)
-	tmpl.Execute(w, today)
+	tmpl.Execute(w, Today)
 }
 
 // SaveAsset saves new asset entry to database if valid
@@ -65,7 +65,7 @@ func SaveAsset(w http.ResponseWriter, r *http.Request) {
 	} else {
 		Result = "Asset added"
 	}
-	tmpl, err := template.ParseFiles("templates/assets.tmpl")
+	tmpl, err := template.ParseFiles(Staticpath + "/templates/assets.tmpl")
 	e(err)
 	tmpl.Execute(w, Result)
 }
@@ -73,7 +73,7 @@ func SaveAsset(w http.ResponseWriter, r *http.Request) {
 // SearchAsset handles requests to addasset
 func SearchAsset(w http.ResponseWriter, r *http.Request) {
 	// TODO: Generic path
-	tmpl, err := template.ParseFiles("templates/searchasset.tmpl")
+	tmpl, err := template.ParseFiles(Staticpath + "/templates/searchasset.tmpl")
 	e(err)
 	tmpl.Execute(w, "")
 }

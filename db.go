@@ -246,4 +246,24 @@ func createDB(homedir string) {
 	_, err = db.Exec(sqlStmt)
 	e(err)
 
+	sqlStmt = `create table secincident(id INTEGER NOT NULL PRIMARY KEY,
+		secincidentID TEXT NOT NULL,
+		reportedBy TEXT NOT NULL,
+		reporterName TEXT,
+		reportedAsset INTEGER NOT NULL,
+		reportedService INTEGER NOT NULL,
+		reportedDate TEXT NOT NULL,
+		shortDesc TEXT,
+		longDesc TEXT,
+		stillOpen INTEGER,
+		forwardedTo INTEGER,
+			FOREIGN KEY (reportedAsset) REFERENCES assets(id),
+			FOREIGN KEY (reportedService) REFERENCES services(id),
+		    FOREIGN KEY (forwardedTo) REFERENCES functions(id)
+	)`
+	_, err = db.Exec(sqlStmt)
+	e(err)
+
+	// set default values
+
 }
