@@ -3,6 +3,7 @@ package main
 import (
 	"html/template"
 	"net/http"
+	"time"
 )
 
 // Asset is the type that defines an asset
@@ -29,11 +30,11 @@ func Assets(w http.ResponseWriter, r *http.Request) {
 
 // AddAsset handles requests to addasset
 func AddAsset(w http.ResponseWriter, r *http.Request) {
-	Today := "2018-01-01"
+	Today := time.Now()
 	// TODO: Generic path
 	tmpl, err := template.ParseFiles(Staticpath + "/templates/addasset.tmpl")
 	e(err)
-	tmpl.Execute(w, Today)
+	tmpl.Execute(w, Today.Format(time.RFC3339))
 }
 
 // SaveAsset saves new asset entry to database if valid
