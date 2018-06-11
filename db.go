@@ -265,5 +265,17 @@ func createDB(homedir string) {
 	e(err)
 
 	// set default values
+	sqlStmt = `insert into zones values
+		(null, 'INTERNET'),
+		(null, 'DMZ'),
+		(null, 'INTRANET'),
+		(null, 'PRODUCTION'),
+		(null, 'TEST'),
+		(null, 'DEVELOPMENT'),
+		(null, 'DATABASE'),
+		(null, 'AUTHENTICATION'),
+		(null, 'ADMINISTRATION')`
 
+	_, err = db.Exec(sqlStmt)
+	e(err)
 }
