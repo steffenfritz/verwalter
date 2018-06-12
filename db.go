@@ -86,6 +86,7 @@ func createDB(homedir string) {
 	// services is for network services
 	sqlStmt = `create table services(id INTEGER NOT NULL PRIMARY KEY, 
 		servicename TEXT,
+		application TEXT,
 		port INTEGER,
 		license INTEGER,
 		  FOREIGN KEY(license) REFERENCES licenses(id)
@@ -164,7 +165,7 @@ func createDB(homedir string) {
 	// wasID gives the ID of the same person before something has changed in its dates
 	// becameID gives the ID of the same person after something has changed in its dates
 	// hasAccessTo lists asset ID-service tuples the person has access to, e.g. ()
-	sqlStmt = `create table persons (id INTEGER NOT NULL PRIMARY KEY,
+	sqlStmt = `create table persons(id INTEGER NOT NULL PRIMARY KEY,
 		firstname TEXT,
 		middlename TEXT,
 		lastname TEXT,
@@ -240,6 +241,7 @@ func createDB(homedir string) {
 	sqlStmt = `create table licenses(id INTEGER NOT NULL PRIMARY KEY,
 		name TEXT,
 		hyperlink TEXT,
+		version TEXT,
 		validFrom TEXT,
 		validTo TEXT
 	)`
@@ -264,7 +266,8 @@ func createDB(homedir string) {
 	_, err = db.Exec(sqlStmt)
 	e(err)
 
-	// set default values
+	// SET DEFAULT VALUES
+	// DEFAULT ZONE VALUES
 	sqlStmt = `insert into zones values
 		(null, 'INTERNET'),
 		(null, 'DMZ'),
@@ -278,4 +281,28 @@ func createDB(homedir string) {
 
 	_, err = db.Exec(sqlStmt)
 	e(err)
+
+	// DEFAULT LICENSES
+	sqlStmt = `insert into licenses values 
+		(null, 'openssh', 'https://cvsweb.openbsd.org/cgi-bin/cvsweb/src/usr.bin/ssh/LICENCE?rev=HEAD', '1.20' ,'2017-04-30', null),
+		(null, 'Apache License', 'https://www.apache.org/licenses/LICENSE-2.0.txt', '2.0', '2004-01', null),
+		(null, 'X11 License', null, null, null , null),
+		(null, 'GPL', 'https://www.gnu.org/licenses/gpl-2.0.en.html', '2.0', '1991-06-02', null),
+		(null, 'GPL', 'https://www.gnu.org/licenses/gpl-3.0.en.html', '3.0', '2007-06-29', null),
+		(null, 'EPL', 'https://www.eclipse.org/legal/epl-v20.html', '2.0', '2017-08-24', null)`
+
+	_, err = db.Exec(sqlStmt)
+	e(err)
+
+	// DEFAULT SERVICES
+	sqlStmt = `insert into services values
+		(null, 'ssh', 'openssh', 22, 0),
+		(null, 'smtp', 'postfix', 25, 5),
+		(null, 'httpd', 'Apache httpd', 80, 1),
+		(null, 'imap', 'postfix', 143, 5),
+		(null, 'application server', 'Tomcat', 8080, 1)`
+
+	_, err = db.Exec(sqlStmt)
+	e(err)
+
 }
