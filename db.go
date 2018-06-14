@@ -78,6 +78,7 @@ func createDB(homedir string) {
 		validFrom TEXT,
 		validTo TEXT,
 		responsible INTEGER,
+		location TEXT,
 		  FOREIGN KEY (responsible) REFERENCES functions(id)
 	);`
 	_, err = db.Exec(sqlStmt)
