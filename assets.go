@@ -18,6 +18,7 @@ type Asset struct {
 	zone         string
 	active       string
 	responsible  string
+	location     string
 	functionsID  int
 }
 
@@ -53,11 +54,12 @@ func SaveAsset(w http.ResponseWriter, r *http.Request) {
 	aactive := r.Form.Get("aactive")
 	avalfrom := r.Form.Get("avalidFrom")
 	avalto := r.Form.Get("avalidTo")
+	alocation := r.Form.Get("location")
 
-	sqlStmt, err := db.Prepare("insert into assets values(?,?,?,?,?,?,?,?,?,?,?,?,?)")
+	sqlStmt, err := db.Prepare("insert into assets values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
 	e(err)
 
-	_, err = sqlStmt.Exec(nil, aname, aaddress, ahostname, apurpose, aos, aosversion, aosupdate, azone, aactive, avalfrom, avalto, 0)
+	_, err = sqlStmt.Exec(nil, aname, aaddress, ahostname, apurpose, aos, aosversion, aosupdate, azone, aactive, avalfrom, avalto, alocation, 0)
 	e(err)
 
 	Result := ""
