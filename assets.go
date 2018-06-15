@@ -54,7 +54,7 @@ func SaveAsset(w http.ResponseWriter, r *http.Request) {
 	aactive := r.Form.Get("aactive")
 	avalfrom := r.Form.Get("avalidFrom")
 	avalto := r.Form.Get("avalidTo")
-	alocation := r.Form.Get("location")
+	alocation := r.Form.Get("alocation")
 
 	sqlStmt, err := db.Prepare("insert into assets values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
 	e(err)

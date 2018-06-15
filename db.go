@@ -77,8 +77,8 @@ func createDB(homedir string) {
 		active INTEGER,
 		validFrom TEXT,
 		validTo TEXT,
-		responsible INTEGER,
 		location TEXT,
+		responsible INTEGER,
 		  FOREIGN KEY (responsible) REFERENCES functions(id)
 	);`
 	_, err = db.Exec(sqlStmt)
@@ -236,6 +236,16 @@ func createDB(homedir string) {
 		downatm INTEGER,
 		  FOREIGN KEY (asset_id) REFERENCES assets(id)
 	)`
+	_, err = db.Exec(sqlStmt)
+	e(err)
+
+	sqlStmt = `create table os(id INTEGER NOT NULL PRIMARY KEY,
+		name TEXT,
+		hyperlink TEXT,
+		version TEXT,
+		license_id INTEGER,
+		  FOREIGN KEY (license_id) REFERENCES licenses(id)
+		)`
 	_, err = db.Exec(sqlStmt)
 	e(err)
 
