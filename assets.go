@@ -88,7 +88,6 @@ func AssetResult(w http.ResponseWriter, r *http.Request) {
 
 	for n := range keys {
 		println(keys[n])
-
 	}
 
 	sqlStmt, err := db.Prepare("select * from assets where os='OpenBSD'")
@@ -97,6 +96,3 @@ func AssetResult(w http.ResponseWriter, r *http.Request) {
 	_, err = sqlStmt.Exec()
 	e(err)
 }
-
-// ShowAsset shows a single asset entry
-func ShowAsset(w http.ResponseWriter, r *http.Request) {}

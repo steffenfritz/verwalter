@@ -155,17 +155,7 @@ func createDB(homedir string) {
 	_, err = db.Exec(sqlStmt)
 	e(err)
 
-	// NOTE: If something changed in the persons's dates,
-	//       a new entry for the same person is created
-	//
-	// id is the row id
-	// most fields are self-descriptive
-	// functions lists functions of the person the ITIL way, e.g. [SAP, HELPDESK]
-	// validFrom gives the date from when the person was active with this data
-	// validTo gives the date until the person was active with this data
-	// wasID gives the ID of the same person before something has changed in its dates
-	// becameID gives the ID of the same person after something has changed in its dates
-	// hasAccessTo lists asset ID-service tuples the person has access to, e.g. ()
+	// persons table
 	sqlStmt = `create table persons(id INTEGER NOT NULL PRIMARY KEY,
 		firstname TEXT,
 		middlename TEXT,
@@ -178,19 +168,13 @@ func createDB(homedir string) {
 		city TEXT,
 		zip TEXT,
 		country TEXT,
-		functions TEXT,
 		validFrom TEXT,
-		validTo TEXT,
-		wasID INTEGER,
-		hasAccessTo TEXT
+		validTo TEXT
 	);`
 	_, err = db.Exec(sqlStmt)
 	e(err)
 
-	// id is the row id
-	// descname is a descriptive name
-	// responsibleName gives the name of a responsible person for the function
-	// most fields are self-descriptive
+	// functions table
 	sqlStmt = `create table functions(id INTEGER NOT NULL PRIMARY KEY,
 		descname TEXT,
 		landline TEXT,

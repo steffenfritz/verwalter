@@ -1,0 +1,41 @@
+<html>
+   <head>
+        <link rel="stylesheet" type="text/css" href="static/menu.css">
+   </head>  
+
+    <body>
+        <h1>verwalter</h1>
+
+         <ul>
+           <li><a href="assets">Assets</a></li>
+           <li><a href="networks">Networks</a></li>
+           <li><a href="persons">Persons</a></li>
+           <li><a href="policies">Policies</a></li>
+           <li><a href="vulns">Vulnerables</a></li>
+           <li><a href="secincident">Security Incident</a></li>
+           <li><a href="processes">Processes</a></li>
+           <li><a href="reports">Reports</a></li>
+        </ul> 
+
+        <fieldset>
+            <form action="saveperson" method="post">
+                First Name: <input type="text" name="pfirstname">
+                Middle Name: <input type="text" name="pmiddlename">
+                Last Name: <input type="text" name="plastname">
+                Department: <input type="text" name="pdepartment">
+                Telephone: <input type="text" name="plandline">
+                Mobile: <input type="text" name="pmobile">
+                Street: <input type="text" name="pstreet">
+                House Number: <input type="text" name="pnumber">
+                City: <input type="text" name="pcity">
+                Zip: <input type="text" name="pzip">
+                Country: <input type="text" name="pcountry">
+                validFrom: <input type="text" name="pvalidfrom" value={{.}}>
+                validTo: <input type="text" name="pvalidto" value="2100-01-01">
+
+                <input type="submit" value="Save">
+            </form>
+        </fieldset>
+
+    </body>
+</html>

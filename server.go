@@ -24,6 +24,8 @@ func serv() {
 	r.HandleFunc("/assetresult", AssetResult)
 	r.HandleFunc("/networks", Networks)
 	r.HandleFunc("/persons", Persons)
+	r.HandleFunc("/addperson", AddPerson)
+	r.HandleFunc("/saveperson", SavePerson)
 	r.HandleFunc("/policies", Policies)
 	r.HandleFunc("/vulns", Vulns)
 	r.HandleFunc("/secincident", Secincident)
