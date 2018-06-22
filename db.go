@@ -5,11 +5,14 @@ import (
 	"database/sql"
 	"log"
 	"os"
+	"time"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
 var db *sql.DB
+var verwalterVersion = "0.1.0"
+var dbVersion = "0.1.0"
 
 func connpool(homedir string) {
 	dbpath := homedir + "/.verwalter/verwalter.db"
@@ -300,4 +303,20 @@ func createDB(homedir string) {
 	_, err = db.Exec(sqlStmt)
 	e(err)
 
+	// BASESETTINGS
+	// get local timezone
+	tnow := time.Now()
+	tzone, _ := tnow.Zone()
+	// verwalter language iso 639-1
+	lang := "en"
+	// processSched defines how often the process scheduler runs in minutes. This must be ignored at update
+	processSched := 30
+	// default script location
+	scriptLocation := ""
+
+	sql, err := db.Prepare("insert into basesettings values(?,?,?,?,?,?,?,?,?,?,?)")
+	e(err)
+
+	_, err = sql.Exec(nil, tzone, lang, processSched, scriptLocation, verwalterVersion, dbVersion, "", "", "", "")
+	e(err)
 }

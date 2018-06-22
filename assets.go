@@ -17,6 +17,8 @@ type Asset struct {
 	lastosupdate string
 	zone         string
 	active       string
+	validFrom    string
+	validTo      string
 	responsible  string
 	location     string
 	functionsID  int
@@ -32,7 +34,6 @@ func Assets(w http.ResponseWriter, r *http.Request) {
 // AddAsset handles requests to addasset
 func AddAsset(w http.ResponseWriter, r *http.Request) {
 	Today := time.Now()
-	// TODO: Generic path
 	tmpl, err := template.ParseFiles(Staticpath + "/templates/addasset.tmpl")
 	e(err)
 	tmpl.Execute(w, Today.Format(time.RFC3339))
@@ -43,23 +44,25 @@ func SaveAsset(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	e(err)
 
-	aname := r.Form.Get("aname")
-	aaddress := r.Form.Get("aaddress")
-	ahostname := r.Form.Get("ahostname")
-	apurpose := r.Form.Get("apurpose")
-	aos := r.Form.Get("aos")
-	aosversion := r.Form.Get("aosversion")
-	aosupdate := r.Form.Get("aosupdate")
-	azone := r.Form.Get("azone")
-	aactive := r.Form.Get("aactive")
-	avalfrom := r.Form.Get("avalidFrom")
-	avalto := r.Form.Get("avalidTo")
-	alocation := r.Form.Get("alocation")
+	a := new(Asset)
+
+	a.descname = r.Form.Get("aname")
+	a.address = r.Form.Get("aaddress")
+	a.hostname = r.Form.Get("ahostname")
+	a.purpose = r.Form.Get("apurpose")
+	a.os = r.Form.Get("aos")
+	a.osversion = r.Form.Get("aosversion")
+	a.lastosupdate = r.Form.Get("aosupdate")
+	a.zone = r.Form.Get("azone")
+	a.active = r.Form.Get("aactive")
+	a.validFrom = r.Form.Get("avalidFrom")
+	a.validTo = r.Form.Get("avalidTo")
+	a.location = r.Form.Get("alocation")
 
 	sqlStmt, err := db.Prepare("insert into assets values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
 	e(err)
 
-	_, err = sqlStmt.Exec(nil, aname, aaddress, ahostname, apurpose, aos, aosversion, aosupdate, azone, aactive, avalfrom, avalto, alocation, 0)
+	_, err = sqlStmt.Exec(nil, a.descname, a.address, a.hostname, a.purpose, a.os, a.osversion, a.lastosupdate, a.zone, a.active, a.validFrom, a.validTo, a.location, 0)
 	e(err)
 
 	Result := ""
