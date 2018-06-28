@@ -1,6 +1,30 @@
-body {
-    background-image: url("static/wallpaper.jpg")    
+body, html {
+    height: 100%;
 }
+
+.bg {
+    /* The image used */
+    background-image: url("wallpaper.jpg");
+
+    /* Full height */
+    height: 100%;
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+h1 { 
+    color: #0f0f0f; 
+    font-family: 'Georgia', serif; 
+    font-size: 25px; 
+    font-weight: normal;
+    line-height: 15px; 
+    margin: 10px 0 20px;
+    text-align: center;
+    }
 
 ul {
     list-style-type: none;

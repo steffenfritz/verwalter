@@ -100,7 +100,11 @@ func createDB(homedir string) {
 
 	// zones is for zone names
 	sqlStmt = `create table zones(id INTEGER NOT NULL PRIMARY KEY, 
-		zonename TEXT
+		name TEXT,
+		description TEXT,
+		netrange TEXT,
+		validFrom TEXT,
+		validTo TEXT
 	);`
 	_, err = db.Exec(sqlStmt)
 	e(err)
@@ -147,7 +151,7 @@ func createDB(homedir string) {
 	e(err)
 
 	// redundancy is a relation table for host_service to host_service
-	sqlStmt = `create table redundancy (id INTEGER NOT NULL PRIMARY KEY, 
+	sqlStmt = `create table redundancy(id INTEGER NOT NULL PRIMARY KEY, 
 		host_service_id INTEGER,
 		redundant_host_service INTEGER,
 		validFrom TEXT,
@@ -267,15 +271,15 @@ func createDB(homedir string) {
 	// SET DEFAULT VALUES
 	// DEFAULT ZONE VALUES
 	sqlStmt = `insert into zones values
-		(null, 'INTERNET'),
-		(null, 'DMZ'),
-		(null, 'INTRANET'),
-		(null, 'PRODUCTION'),
-		(null, 'TEST'),
-		(null, 'DEVELOPMENT'),
-		(null, 'DATABASE'),
-		(null, 'AUTHENTICATION'),
-		(null, 'ADMINISTRATION')`
+		(null, 'INTERNET', 'Public Internet', '', '', ''),
+		(null, 'DMZ', 'Demilitarized Zone', '', '', ''),
+		(null, 'INTRANET', 'Intranet', '', '', ''),
+		(null, 'PRODUCTION', 'Zone for productive systems', '', '', ''),
+		(null, 'INTEGRATION', 'Zone for integrative systems', '', '', ''),
+		(null, 'TEST', 'Zone for test systems', '', '', ''),
+		(null, 'DEVELOPMENT', 'Zone for development systems', '', '', ''),
+		(null, 'AUTHENTICATION', 'Zone for systems related to authentication', '', '', ''),
+		(null, 'ADMINISTRATION', 'Zone for administrative and monitoring systems', '', '', '')`
 
 	_, err = db.Exec(sqlStmt)
 	e(err)

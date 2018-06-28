@@ -1,9 +1,10 @@
 <html>
-  <head>
+    <head>
         <link rel="stylesheet" type="text/css" href="static/menu.css">
-  </head>  
+    </head>
 
     <body>
+
         <div class="bg">
          <ul>
            <li><a href="assets">Assets</a></li>
@@ -15,7 +16,21 @@
            <li><a href="processes">Processes</a></li>
            <li><a href="reports">Reports</a></li>
         </ul> 
-        <h1>ToDo</h1>
-        </div>
+
+
+        <fieldset>
+            <form action="savezone" method="post">
+                Zone Name: <input type="text" name="zname">
+                Description: <input type="text" name="zdescription">
+                Range (CIDR): <input type="text" name="znetrange">
+                Valid From: <input type="text" name="zvalidFrom" value={{.}}>
+                Valid To: <input type="text" name="zvalidTo" value="2100-01-01">
+                
+                <input type="submit" value="Save">
+            </form> 
+        </fieldset>
+    </div>
     </body>
 </html>
+
+ 
