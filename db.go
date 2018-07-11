@@ -251,8 +251,8 @@ func createDB(homedir string) {
 	e(err)
 
 	sqlStmt = `create table secincident(id INTEGER NOT NULL PRIMARY KEY,
-		reporterLastName TEXT,
 		reporterFirstName TEXT,
+		reporterLastName TEXT,
 		reporterEmail TEXT,
 		reporterTelNo TEXT,
 		reportedAsset INTEGER NOT NULL,
@@ -260,12 +260,11 @@ func createDB(homedir string) {
 		reportedDate TEXT NOT NULL,
 		shortInitDesc TEXT,
 		longInitDesc TEXT,
+		extTicketID TEXT,
 		stillOpen INTEGER,
 		closedDate TEXT,
-		forwardedTo INTEGER,
 			FOREIGN KEY (reportedAsset) REFERENCES assets(id),
 			FOREIGN KEY (reportedService) REFERENCES services(id),
-		    FOREIGN KEY (forwardedTo) REFERENCES functions(id)
 	)`
 	_, err = db.Exec(sqlStmt)
 	e(err)

@@ -32,6 +32,8 @@ func serv() {
 	r.HandleFunc("/policies", Policies)
 	r.HandleFunc("/vulns", Vulns)
 	r.HandleFunc("/secincident", Secincident)
+	r.HandleFunc("/addsecincident", Secincident)
+	r.HandleFunc("/savesecincident", SaveSecincident)
 	r.HandleFunc("/processes", Processes)
 	r.HandleFunc("/reports", Reports)
 
@@ -83,13 +85,6 @@ func Policies(w http.ResponseWriter, r *http.Request) {
 // Vulns handles requests to vulns
 func Vulns(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles(Staticpath + "/templates/vulnerables.tmpl")
-	e(err)
-	tmpl.Execute(w, "")
-}
-
-// Secincident handles requests to secincident
-func Secincident(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles(Staticpath + "/templates/secincident.tmpl")
 	e(err)
 	tmpl.Execute(w, "")
 }
