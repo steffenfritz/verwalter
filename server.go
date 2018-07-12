@@ -32,7 +32,7 @@ func serv() {
 	r.HandleFunc("/policies", Policies)
 	r.HandleFunc("/vulns", Vulns)
 	r.HandleFunc("/secincident", Secincident)
-	r.HandleFunc("/addsecincident", Secincident)
+	r.HandleFunc("/addsecincident", AddSecincident)
 	r.HandleFunc("/savesecincident", SaveSecincident)
 	r.HandleFunc("/processes", Processes)
 	r.HandleFunc("/reports", Reports)

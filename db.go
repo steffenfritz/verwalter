@@ -98,6 +98,16 @@ func createDB(homedir string) {
 	_, err = db.Exec(sqlStmt)
 	e(err)
 
+	// accessedby table contains who can access a service
+	sqlStmt = `create table accessedby(id INTEGER NOT NULL PRIMARY KEY,
+		serviceid INT NOT NULL,
+		assetid INT NOT NULL,
+		personid INT NOT NULL,
+		  FOREIGN KEY(serviceid) REFERENCES services(id),
+		  FOREIGN KEY(assetid) REFERENCES assets(id),
+		  FOREIGN KEY(personid) REFERENCES persons(id)
+	)`
+
 	// zones is for zone names
 	sqlStmt = `create table zones(id INTEGER NOT NULL PRIMARY KEY, 
 		name TEXT,
@@ -180,6 +190,17 @@ func createDB(homedir string) {
 	);`
 	_, err = db.Exec(sqlStmt)
 	e(err)
+
+	sqlStmt = `create table hasaccessto(id INTEGER NOT NULL PRIMARY KEY,
+		personid INT,
+		assetid INT,
+		serviceid INT,
+		validFrom TEXT,
+		validTo TEXT,
+		  FOREIGN KEY (personid) REFERENCES persons(id),
+		  FOREIGN KEY (assetid) REFERENCES assets(id),
+		  FOREIGN KEY (serviceid) REFERENCES services(id)
+	)`
 
 	// functions table
 	sqlStmt = `create table functions(id INTEGER NOT NULL PRIMARY KEY,
@@ -264,7 +285,7 @@ func createDB(homedir string) {
 		stillOpen INTEGER,
 		closedDate TEXT,
 			FOREIGN KEY (reportedAsset) REFERENCES assets(id),
-			FOREIGN KEY (reportedService) REFERENCES services(id),
+			FOREIGN KEY (reportedService) REFERENCES services(id)
 	)`
 	_, err = db.Exec(sqlStmt)
 	e(err)
