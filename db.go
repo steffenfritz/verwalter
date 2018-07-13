@@ -191,6 +191,20 @@ func createDB(homedir string) {
 	_, err = db.Exec(sqlStmt)
 	e(err)
 
+	// policies table
+	sqlStmt = `create table policies(id INTEGER NOT NULL PRIMARY KEY,
+		passwordagefactor INT,
+		vulnagefactorinfo REAL,
+		vulnagefactorlow REAL,
+		vulnagefactormedium REAL,
+		vulnagefactorhigh REAL,
+		secincidentagefactor REAL,
+		updateagefactor REAL,
+		);`
+	_, err = db.Exec(sqlStmt)
+	e(err)
+
+	// hasaccessto table
 	sqlStmt = `create table hasaccessto(id INTEGER NOT NULL PRIMARY KEY,
 		personid INT,
 		assetid INT,
@@ -217,6 +231,7 @@ func createDB(homedir string) {
 	_, err = db.Exec(sqlStmt)
 	e(err)
 
+	// vulnScan table
 	sqlStmt = `create table vulnScan(id INTEGER NOT NULL PRIMARY KEY,
 		descname TEXT,
 		tool TEXT,
@@ -329,6 +344,14 @@ func createDB(homedir string) {
 	_, err = db.Exec(sqlStmt)
 	e(err)
 
+	// DEFAULT POLICIES
+
+	sql, err := db.Prepare("insert into basesettings values(?,?,?,?,?,?,?,?,?,?,?)")
+	e(err)
+
+	sql.Exec(nil, 90, 30, 14, 7, 3, 1, 14)
+	e(err)
+
 	// BASESETTINGS
 	// get local timezone
 	tnow := time.Now()
@@ -340,7 +363,7 @@ func createDB(homedir string) {
 	// default script location
 	scriptLocation := ""
 
-	sql, err := db.Prepare("insert into basesettings values(?,?,?,?,?,?,?,?,?,?,?)")
+	sql, err = db.Prepare("insert into basesettings values(?,?,?,?,?,?,?,?,?,?,?)")
 	e(err)
 
 	_, err = sql.Exec(nil, tzone, lang, processSched, scriptLocation, verwalterVersion, dbVersion, "", "", "", "")
