@@ -86,16 +86,21 @@ func SearchAsset(w http.ResponseWriter, r *http.Request) {
 
 // AssetResult queries the database and prints the result as a list of links that gets by db id
 func AssetResult(w http.ResponseWriter, r *http.Request) {
-
 	keys := r.URL.Query()
+	qKeys := map[string]string{"descname": "*", "hostname": "*", "zone": "*"}
 
-	for n := range keys {
-		println(keys[n])
+	for key, value := range keys {
+		if len(value[0]) != 0 {
+			qKeys[key] = value[0]
+		}
 	}
 
-	sqlStmt, err := db.Prepare("select * from assets where os='OpenBSD'")
+	rows, err := db.Query("select * from assets where descname=? AND hostname=? AND zone=?", qKeys["descname"], qKeys["hostname"], qKeys["zone"])
 	e(err)
+	defer rows.Close()
 
-	_, err = sqlStmt.Exec()
-	e(err)
+	for rows.Next() {
+		// NEXT
+	}
+
 }

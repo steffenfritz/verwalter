@@ -200,6 +200,11 @@ func createDB(homedir string) {
 		vulnagefactorhigh REAL,
 		secincidentagefactor REAL,
 		updateagefactor REAL,
+		vulninfofactor REAL,
+		vulnlowfactor REAL,
+		vulnmediumfactor REAL,
+		vulnhighfactor REAL,
+		secincidentfactor REAL
 		);`
 	_, err = db.Exec(sqlStmt)
 	e(err)
@@ -345,11 +350,10 @@ func createDB(homedir string) {
 	e(err)
 
 	// DEFAULT POLICIES
-
-	sql, err := db.Prepare("insert into basesettings values(?,?,?,?,?,?,?,?,?,?,?)")
+	sql, err := db.Prepare("insert into basesettings values(?,?,?,?,?,?,?,?,?,?,?,?,?)")
 	e(err)
 
-	sql.Exec(nil, 90, 30, 14, 7, 3, 1, 14)
+	sql.Exec(nil, 90, 30, 14, 7, 3, 1, 14, 0.2, 0.4, 0.6, 1.0, 2.0)
 	e(err)
 
 	// BASESETTINGS
