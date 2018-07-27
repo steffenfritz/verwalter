@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"html/template"
 	"net/http"
 	"time"
@@ -8,6 +9,7 @@ import (
 
 // Asset is the type that defines an asset
 type Asset struct {
+	assetid      string
 	descname     string
 	address      string
 	hostname     string
@@ -19,9 +21,26 @@ type Asset struct {
 	active       string
 	validFrom    string
 	validTo      string
-	responsible  string
 	location     string
-	functionsID  int
+	responsible  int
+}
+
+// SQLAsset is used to unmarshal sql queries with possible null values
+type SQLAsset struct {
+	assetid      sql.NullString
+	descname     sql.NullString
+	address      sql.NullString
+	hostname     sql.NullString
+	purpose      sql.NullString
+	os           sql.NullString
+	osversion    sql.NullString
+	lastosupdate sql.NullString
+	zone         sql.NullString
+	active       sql.NullString
+	validFrom    sql.NullString
+	validTo      sql.NullString
+	location     sql.NullString
+	responsible  sql.NullInt64
 }
 
 // Assets handles requests to assets
@@ -99,8 +118,20 @@ func AssetResult(w http.ResponseWriter, r *http.Request) {
 	e(err)
 	defer rows.Close()
 
+	var resultList []SQLAsset
 	for rows.Next() {
-		// NEXT
+		var tempResult SQLAsset
+		err := rows.Scan(&tempResult.assetid, &tempResult.descname, &tempResult.address, &tempResult.hostname,
+			&tempResult.purpose, &tempResult.os, &tempResult.osversion, &tempResult.lastosupdate,
+			&tempResult.zone, &tempResult.active, &tempResult.validFrom, &tempResult.validTo,
+			&tempResult.location, &tempResult.responsible)
+
+		e(err)
+
+		println(tempResult.hostname.String)
 	}
 
+	for n := range resultList {
+		println(n)
+	}
 }
