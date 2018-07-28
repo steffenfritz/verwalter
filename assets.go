@@ -27,8 +27,8 @@ type Asset struct {
 
 // SQLAsset is used to unmarshal sql queries with possible null values
 type SQLAsset struct {
-	assetid      sql.NullString
-	descname     sql.NullString
+	Assetid      sql.NullString
+	Descname     sql.NullString
 	address      sql.NullString
 	hostname     sql.NullString
 	purpose      sql.NullString
@@ -106,7 +106,7 @@ func SearchAsset(w http.ResponseWriter, r *http.Request) {
 // AssetResult queries the database and prints the result as a list of links that gets by db id
 func AssetResult(w http.ResponseWriter, r *http.Request) {
 	keys := r.URL.Query()
-	qKeys := map[string]string{"descname": "*", "hostname": "*", "zone": "*"}
+	qKeys := map[string]string{"descname": "%", "hostname": "%", "zone": "%"}
 
 	for key, value := range keys {
 		if len(value[0]) != 0 {
@@ -114,24 +114,25 @@ func AssetResult(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	rows, err := db.Query("select * from assets where descname=? AND hostname=? AND zone=?", qKeys["descname"], qKeys["hostname"], qKeys["zone"])
+	rows, err := db.Query("select * from assets where descname like ? AND hostname like ? AND zone like ?", qKeys["descname"], qKeys["hostname"], qKeys["zone"])
 	e(err)
 	defer rows.Close()
 
-	var resultList []SQLAsset
+	var ResultList []SQLAsset
 	for rows.Next() {
 		var tempResult SQLAsset
-		err := rows.Scan(&tempResult.assetid, &tempResult.descname, &tempResult.address, &tempResult.hostname,
+		err := rows.Scan(&tempResult.Assetid, &tempResult.Descname, &tempResult.address, &tempResult.hostname,
 			&tempResult.purpose, &tempResult.os, &tempResult.osversion, &tempResult.lastosupdate,
 			&tempResult.zone, &tempResult.active, &tempResult.validFrom, &tempResult.validTo,
 			&tempResult.location, &tempResult.responsible)
 
 		e(err)
 
-		println(tempResult.hostname.String)
+		ResultList = append(ResultList, tempResult)
 	}
 
-	for n := range resultList {
-		println(n)
-	}
+	tmpl, err := template.ParseFiles(Staticpath + "/templates/resultassets.tmpl")
+	e(err)
+	err = tmpl.Execute(w, ResultList)
+	e(err)
 }
