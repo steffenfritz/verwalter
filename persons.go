@@ -1,12 +1,13 @@
 package main
 
 import (
+	"database/sql"
 	"html/template"
 	"net/http"
 	"time"
 )
 
-// Person ist the type that defines a person
+// Person is the type that defines a person
 type Person struct {
 	firstname  string
 	middlename string
@@ -21,6 +22,23 @@ type Person struct {
 	country    string
 	validFrom  string
 	validTo    string
+}
+
+// SQLPerson is used for sql queries that may return null values
+type SQLPerson struct {
+	firstname  sql.NullString
+	middlename sql.NullString
+	lastname   sql.NullString
+	department sql.NullString
+	landline   sql.NullString
+	mobile     sql.NullString
+	street     sql.NullString
+	number     sql.NullString
+	city       sql.NullString
+	zip        sql.NullString
+	country    sql.NullString
+	validFrom  sql.NullString
+	validTo    sql.NullString
 }
 
 // Persons handles requests to persons
@@ -74,4 +92,42 @@ func SavePerson(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles(Staticpath + "/templates/persons.tmpl")
 	e(err)
 	tmpl.Execute(w, Result)
+}
+
+// SearchPerson handles requests to searchzone
+func SearchPerson(w http.ResponseWriter, r *http.Request) {
+	tmpl, err := template.ParseFiles(Staticpath + "/templates/searchperson.tmpl")
+	e(err)
+	tmpl.Execute(w, "")
+}
+
+// PersonResult queries the database and prints the result as a list of zones that links to all hosts
+func PersonResult(w http.ResponseWriter, r *http.Request) {
+	keys := r.URL.Query()
+	qKeys := map[string]string{"pfirstname": "%", "plastname": "%", "department": "%"}
+
+	for key, value := range keys {
+		if len(value[0]) != 0 {
+			qKeys[key] = value[0]
+		}
+	}
+
+	rows, err := db.Query("SELECT * FROM persons WHERE (COALESCE(firstname, '') LIKE ?) AND (COALESCE(lastname, '') LIKE ?) AND (COALESCE(department,'') LIKE ?)", qKeys["pfirstname"], qKeys["plastname"], qKeys["department"])
+	e(err)
+	defer rows.Close()
+
+	var ResultList []SQLZone
+	for rows.Next() {
+		var tempResult SQLZone
+		err := rows.Scan(&tempResult.Zoneid, &tempResult.Name, &tempResult.Description, &tempResult.Netrange, &tempResult.ValidFrom, &tempResult.ValidTo)
+
+		e(err)
+
+		ResultList = append(ResultList, tempResult)
+	}
+
+	tmpl, err := template.ParseFiles(Staticpath + "/templates/resultzones.tmpl")
+	e(err)
+	err = tmpl.Execute(w, ResultList)
+	e(err)
 }

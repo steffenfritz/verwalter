@@ -95,9 +95,8 @@ func SaveAsset(w http.ResponseWriter, r *http.Request) {
 	tmpl.Execute(w, Result)
 }
 
-// SearchAsset handles requests to addasset
+// SearchAsset handles requests to searchasset
 func SearchAsset(w http.ResponseWriter, r *http.Request) {
-	// TODO: Generic path
 	tmpl, err := template.ParseFiles(Staticpath + "/templates/searchasset.tmpl")
 	e(err)
 	tmpl.Execute(w, "")
