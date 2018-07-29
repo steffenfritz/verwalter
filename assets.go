@@ -106,7 +106,7 @@ func SearchAsset(w http.ResponseWriter, r *http.Request) {
 // AssetResult queries the database and prints the result as a list of links that gets by db id
 func AssetResult(w http.ResponseWriter, r *http.Request) {
 	keys := r.URL.Query()
-	qKeys := map[string]string{"descname": "%", "hostname": "%", "zone": "%"}
+	qKeys := map[string]string{"descname": "%", "ahostname": "%", "azone": "%"}
 
 	for key, value := range keys {
 		if len(value[0]) != 0 {
@@ -114,7 +114,7 @@ func AssetResult(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	rows, err := db.Query("select * from assets where descname like ? AND hostname like ? AND zone like ?", qKeys["descname"], qKeys["hostname"], qKeys["zone"])
+	rows, err := db.Query("SELECT * FROM assets WHERE (COALESCE(descname, '') LIKE ?) AND (COALESCE(hostname, '') LIKE ?) AND (COALESCE(zone,'') LIKE ?)", qKeys["descname"], qKeys["ahostname"], qKeys["azone"])
 	e(err)
 	defer rows.Close()
 

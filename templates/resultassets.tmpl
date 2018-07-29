@@ -23,7 +23,9 @@
         </ul>
             <br>
 
-        {{ . }}
+        {{ range . }}
+            {{.Assetid}}
+        {{ end }}
 
         </div>
     </body>
