@@ -70,7 +70,7 @@ func SaveSecincident(w http.ResponseWriter, r *http.Request) {
 	} else {
 		Result = "Person added"
 	}
-	tmpl, err := template.ParseFiles(Staticpath + "/templates/.tmpl")
+	tmpl, err := template.ParseFiles(Staticpath + "/templates/secincident.tmpl")
 	e(err)
 	tmpl.Execute(w, Result)
 

@@ -26,19 +26,20 @@ type Person struct {
 
 // SQLPerson is used for sql queries that may return null values
 type SQLPerson struct {
-	firstname  sql.NullString
-	middlename sql.NullString
-	lastname   sql.NullString
-	department sql.NullString
-	landline   sql.NullString
-	mobile     sql.NullString
-	street     sql.NullString
-	number     sql.NullString
-	city       sql.NullString
-	zip        sql.NullString
-	country    sql.NullString
-	validFrom  sql.NullString
-	validTo    sql.NullString
+	Personid   sql.NullString
+	Firstname  sql.NullString
+	Middlename sql.NullString
+	Lastname   sql.NullString
+	Department sql.NullString
+	Landline   sql.NullString
+	Mobile     sql.NullString
+	Street     sql.NullString
+	Number     sql.NullString
+	City       sql.NullString
+	Zip        sql.NullString
+	Country    sql.NullString
+	ValidFrom  sql.NullString
+	ValidTo    sql.NullString
 }
 
 // Persons handles requests to persons
@@ -116,17 +117,20 @@ func PersonResult(w http.ResponseWriter, r *http.Request) {
 	e(err)
 	defer rows.Close()
 
-	var ResultList []SQLZone
+	var ResultList []SQLPerson
 	for rows.Next() {
-		var tempResult SQLZone
-		err := rows.Scan(&tempResult.Zoneid, &tempResult.Name, &tempResult.Description, &tempResult.Netrange, &tempResult.ValidFrom, &tempResult.ValidTo)
+		var tempResult SQLPerson
+		err := rows.Scan(&tempResult.Personid, &tempResult.Firstname, &tempResult.Middlename,
+			&tempResult.Lastname, &tempResult.Department, &tempResult.Landline, &tempResult.Mobile,
+			&tempResult.Street, &tempResult.Number, &tempResult.City, &tempResult.Zip,
+			&tempResult.Country, &tempResult.ValidFrom, &tempResult.ValidTo)
 
 		e(err)
 
 		ResultList = append(ResultList, tempResult)
 	}
 
-	tmpl, err := template.ParseFiles(Staticpath + "/templates/resultzones.tmpl")
+	tmpl, err := template.ParseFiles(Staticpath + "/templates/resultperson.tmpl")
 	e(err)
 	err = tmpl.Execute(w, ResultList)
 	e(err)
