@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"html/template"
 	"net/http"
 	"time"
@@ -22,6 +23,23 @@ type Secinc struct {
 	extTicketID       string
 	stillOpen         string
 	closedDate        string
+}
+
+// SQLSecinc is used for sql queries that may return null values
+type SQLSecinc struct {
+	Secid             sql.NullString
+	ReporterFirstName sql.NullString
+	ReporterLastName  sql.NullString
+	ReporterEmail     sql.NullString
+	ReporterTelNo     sql.NullString
+	ReportedAsset     sql.NullString
+	ReportedService   sql.NullString
+	ReportedDate      sql.NullString
+	ShortInitDesc     sql.NullString
+	LongInitDesc      sql.NullString
+	ExtTicketID       sql.NullString
+	StillOpen         sql.NullString
+	ClosedDate        sql.NullString
 }
 
 // Secincident handles requests to secincident
@@ -74,4 +92,45 @@ func SaveSecincident(w http.ResponseWriter, r *http.Request) {
 	e(err)
 	tmpl.Execute(w, Result)
 
+}
+
+// SearchSecincident handles requests to searchzone
+func SearchSecincident(w http.ResponseWriter, r *http.Request) {
+	tmpl, err := template.ParseFiles(Staticpath + "/templates/searchsecincident.tmpl")
+	e(err)
+	tmpl.Execute(w, "")
+}
+
+// SecincidentResult queries the database and prints the result as a list of sec incidents
+func SecincidentResult(w http.ResponseWriter, r *http.Request) {
+	keys := r.URL.Query()
+	qKeys := map[string]string{"": "%", "plastname": "%", "department": "%"}
+
+	for key, value := range keys {
+		if len(value[0]) != 0 {
+			qKeys[key] = value[0]
+		}
+	}
+
+	rows, err := db.Query("SELECT * FROM persons WHERE (COALESCE(firstname, '') LIKE ?) AND (COALESCE(lastname, '') LIKE ?) AND (COALESCE(department,'') LIKE ?)", qKeys["pfirstname"], qKeys["plastname"], qKeys["department"])
+	e(err)
+	defer rows.Close()
+
+	var ResultList []SQLPerson
+	for rows.Next() {
+		var tempResult SQLPerson
+		err := rows.Scan(&tempResult.Personid, &tempResult.Firstname, &tempResult.Middlename,
+			&tempResult.Lastname, &tempResult.Department, &tempResult.Landline, &tempResult.Mobile,
+			&tempResult.Street, &tempResult.Number, &tempResult.City, &tempResult.Zip,
+			&tempResult.Country, &tempResult.ValidFrom, &tempResult.ValidTo)
+
+		e(err)
+
+		ResultList = append(ResultList, tempResult)
+	}
+
+	tmpl, err := template.ParseFiles(Staticpath + "/templates/resultperson.tmpl")
+	e(err)
+	err = tmpl.Execute(w, ResultList)
+	e(err)
 }

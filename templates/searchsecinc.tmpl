@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="static/menu.css">
+    </head>
+
+    <body>
+
+        <div class="bg">
+         <ul>
+           <li><a href="assets">Assets</a></li>
+           <li><a href="zones">Zones</a></li>
+           <li><a href="persons">Persons</a></li>
+           <li><a href="policies">Policies</a></li>
+           <li><a href="vulns">Vulnerables</a></li>
+           <li><a href="secincident">Security Incident</a></li>
+           <li><a href="processes">Processes</a></li>
+           <li><a href="reports">Reports</a></li>
+        </ul>
+
+        <form action="secincresult" method="get">
+
+            Affected System: <input type="text" name="asset"><br>
+            Affected Service: <input type="text" name="secincservice"><br>
+            Still Open: <input type="checkbox" name="open">
+            
+            <input type="submit" value="Search">
+        </form> 
+    </div>
+    </body>
+</html>
