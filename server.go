@@ -38,6 +38,7 @@ func serv() {
 	r.HandleFunc("/addsecincident", AddSecincident)
 	r.HandleFunc("/savesecincident", SaveSecincident)
 	r.HandleFunc("/searchsecincident", SearchSecincident)
+	r.HandleFunc("/secincresult", SecincidentResult)
 	r.HandleFunc("/processes", Processes)
 	r.HandleFunc("/reports", Reports)
 

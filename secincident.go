@@ -49,7 +49,7 @@ func Secincident(w http.ResponseWriter, r *http.Request) {
 	tmpl.Execute(w, "")
 }
 
-// AddSecincident handles requests to addperson
+// AddSecincident handles requests to add addsecinc
 func AddSecincident(w http.ResponseWriter, r *http.Request) {
 	Today := time.Now()
 	tmpl, err := template.ParseFiles(Staticpath + "/templates/addsecincident.tmpl")
@@ -57,7 +57,7 @@ func AddSecincident(w http.ResponseWriter, r *http.Request) {
 	tmpl.Execute(w, Today.Format(time.RFC3339))
 }
 
-// SaveSecincident handles requests to addperson
+// SaveSecincident handles requests to savesecinc
 func SaveSecincident(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	e(err)
@@ -86,7 +86,7 @@ func SaveSecincident(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		Result = "There was an error."
 	} else {
-		Result = "Person added"
+		Result = "Security incident added"
 	}
 	tmpl, err := template.ParseFiles(Staticpath + "/templates/secincident.tmpl")
 	e(err)
@@ -96,7 +96,7 @@ func SaveSecincident(w http.ResponseWriter, r *http.Request) {
 
 // SearchSecincident handles requests to searchzone
 func SearchSecincident(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles(Staticpath + "/templates/searchsecincident.tmpl")
+	tmpl, err := template.ParseFiles(Staticpath + "/templates/searchsecinc.tmpl")
 	e(err)
 	tmpl.Execute(w, "")
 }
@@ -104,7 +104,7 @@ func SearchSecincident(w http.ResponseWriter, r *http.Request) {
 // SecincidentResult queries the database and prints the result as a list of sec incidents
 func SecincidentResult(w http.ResponseWriter, r *http.Request) {
 	keys := r.URL.Query()
-	qKeys := map[string]string{"": "%", "plastname": "%", "department": "%"}
+	qKeys := map[string]string{"asset": "%", "secincservice": "%", "open": "%"}
 
 	for key, value := range keys {
 		if len(value[0]) != 0 {
@@ -112,24 +112,27 @@ func SecincidentResult(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	rows, err := db.Query("SELECT * FROM persons WHERE (COALESCE(firstname, '') LIKE ?) AND (COALESCE(lastname, '') LIKE ?) AND (COALESCE(department,'') LIKE ?)", qKeys["pfirstname"], qKeys["plastname"], qKeys["department"])
+	// debug
+	println(qKeys["open"])
+
+	rows, err := db.Query("SELECT * FROM secincident WHERE (COALESCE(reportedAsset, '') LIKE ?) AND (COALESCE(reportedService, '') LIKE ?) AND (COALESCE(stillOpen,'') LIKE ?)", qKeys["asset"], qKeys["secincservice"], qKeys["open"])
 	e(err)
 	defer rows.Close()
 
-	var ResultList []SQLPerson
+	var ResultList []SQLSecinc
 	for rows.Next() {
-		var tempResult SQLPerson
-		err := rows.Scan(&tempResult.Personid, &tempResult.Firstname, &tempResult.Middlename,
-			&tempResult.Lastname, &tempResult.Department, &tempResult.Landline, &tempResult.Mobile,
-			&tempResult.Street, &tempResult.Number, &tempResult.City, &tempResult.Zip,
-			&tempResult.Country, &tempResult.ValidFrom, &tempResult.ValidTo)
+		var tempResult SQLSecinc
+
+		err := rows.Scan(&tempResult.Secid, &tempResult.ReporterFirstName, &tempResult.ReporterLastName, &tempResult.ReporterEmail,
+			&tempResult.ReporterTelNo, &tempResult.ReportedAsset, &tempResult.ReportedService, &tempResult.ReportedDate, &tempResult.ShortInitDesc,
+			&tempResult.LongInitDesc, &tempResult.ExtTicketID, &tempResult.StillOpen, &tempResult.ClosedDate)
 
 		e(err)
 
 		ResultList = append(ResultList, tempResult)
 	}
 
-	tmpl, err := template.ParseFiles(Staticpath + "/templates/resultperson.tmpl")
+	tmpl, err := template.ParseFiles(Staticpath + "/templates/resultsecinc.tmpl")
 	e(err)
 	err = tmpl.Execute(w, ResultList)
 	e(err)
