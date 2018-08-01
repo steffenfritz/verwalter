@@ -350,7 +350,7 @@ func createDB(homedir string) {
 	e(err)
 
 	// DEFAULT POLICIES
-	sql, err := db.Prepare("insert into basesettings values(?,?,?,?,?,?,?,?,?,?,?,?,?)")
+	sql, err := db.Prepare("insert into policies values(?,?,?,?,?,?,?,?,?,?,?,?,?)")
 	e(err)
 
 	sql.Exec(nil, 90, 30, 14, 7, 3, 1, 14, 0.2, 0.4, 0.6, 1.0, 2.0)

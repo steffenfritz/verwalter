@@ -80,13 +80,6 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 
 // All the handlers below have be refactored into their resp. source files
 
-// Policies handles requests to policies
-func Policies(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles(Staticpath + "/templates/policies.tmpl")
-	e(err)
-	tmpl.Execute(w, "")
-}
-
 // Vulns handles requests to vulns
 func Vulns(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles(Staticpath + "/templates/vulnerables.tmpl")
