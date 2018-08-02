@@ -1,3 +1,4 @@
+![Travis CI](https://api.travis-ci.org/steffenfritz/verwalter.svg?branch=master ) [![GoDoc](https://godoc.org/github.com/steffenfritz/verwalter?status.svg)](https://godoc.org/github.com/steffenfritz/verwalter)
 # verwalter
 A tool to manage the boring IT sec book-keeping tasks.
 
