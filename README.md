@@ -1,3 +1,4 @@
+![Travis CI](https://api.travis-ci.org/steffenfritz/verwalter.svg?branch=master )
 # verwalter
 A tool to manage the boring IT sec book-keeping tasks.
 
