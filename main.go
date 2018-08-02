@@ -1,3 +1,5 @@
+// verwalter is a tool to manage the boring yet important security stuff for small environments.
+// verwalter is kind of a CMDB. It consists of a database scheme, some logic and a poor web ui.
 package main
 
 import (
