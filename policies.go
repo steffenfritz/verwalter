@@ -56,5 +56,15 @@ func Policies(w http.ResponseWriter, r *http.Request) {
 	PolicyStatus.TFP = TFP
 	PolicyStatus.SFP = SFP
 
-	tmpl.Execute(w, PolicyStatus)
+	err = tmpl.Execute(w, PolicyStatus)
+	e(err)
 }
+
+// PasswordEscalation checks the age of passwords and sends notifications if necessary
+func PasswordEscalation() {}
+
+// VulnEscalation checks the age and severity of vulnerabilities and sends notifications if necessary
+func VulnEscalation() {}
+
+// SecIncEscalation checks the age and severity of security incidents and sends notifications if necessary
+func SecIncEscalation() {}

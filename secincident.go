@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	"html/template"
 	"net/http"
 	"time"
@@ -25,23 +24,6 @@ type Secinc struct {
 	closedDate        string
 }
 
-// SQLSecinc is used for sql queries that may return null values
-type SQLSecinc struct {
-	Secid             sql.NullString
-	ReporterFirstName sql.NullString
-	ReporterLastName  sql.NullString
-	ReporterEmail     sql.NullString
-	ReporterTelNo     sql.NullString
-	ReportedAsset     sql.NullString
-	ReportedService   sql.NullString
-	ReportedDate      sql.NullString
-	ShortInitDesc     sql.NullString
-	LongInitDesc      sql.NullString
-	ExtTicketID       sql.NullString
-	StillOpen         sql.NullString
-	ClosedDate        sql.NullString
-}
-
 // Secincident handles requests to secincident
 func Secincident(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles(Staticpath + "/templates/secincident.tmpl")
@@ -49,7 +31,7 @@ func Secincident(w http.ResponseWriter, r *http.Request) {
 	tmpl.Execute(w, "")
 }
 
-// AddSecincident handles requests to add addsecinc
+// AddSecincident handles requests to addperson
 func AddSecincident(w http.ResponseWriter, r *http.Request) {
 	Today := time.Now()
 	tmpl, err := template.ParseFiles(Staticpath + "/templates/addsecincident.tmpl")
@@ -57,7 +39,7 @@ func AddSecincident(w http.ResponseWriter, r *http.Request) {
 	tmpl.Execute(w, Today.Format(time.RFC3339))
 }
 
-// SaveSecincident handles requests to savesecinc
+// SaveSecincident handles requests to addperson
 func SaveSecincident(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	e(err)
@@ -86,7 +68,7 @@ func SaveSecincident(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		Result = "There was an error."
 	} else {
-		Result = "Security incident added"
+		Result = "Incident added"
 	}
 	tmpl, err := template.ParseFiles(Staticpath + "/templates/secincident.tmpl")
 	e(err)
@@ -94,46 +76,8 @@ func SaveSecincident(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// SearchSecincident handles requests to searchzone
-func SearchSecincident(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles(Staticpath + "/templates/searchsecinc.tmpl")
-	e(err)
-	tmpl.Execute(w, "")
-}
+// SearchSecincident searches security incidents
+func SearchSecincident(w http.ResponseWriter, r *http.Request) {}
 
-// SecincidentResult queries the database and prints the result as a list of sec incidents
-func SecincidentResult(w http.ResponseWriter, r *http.Request) {
-	keys := r.URL.Query()
-	qKeys := map[string]string{"asset": "%", "secincservice": "%", "open": "%"}
-
-	for key, value := range keys {
-		if len(value[0]) != 0 {
-			qKeys[key] = value[0]
-		}
-	}
-
-	// debug
-	println(qKeys["open"])
-
-	rows, err := db.Query("SELECT * FROM secincident WHERE (COALESCE(reportedAsset, '') LIKE ?) AND (COALESCE(reportedService, '') LIKE ?) AND (COALESCE(stillOpen,'') LIKE ?)", qKeys["asset"], qKeys["secincservice"], qKeys["open"])
-	e(err)
-	defer rows.Close()
-
-	var ResultList []SQLSecinc
-	for rows.Next() {
-		var tempResult SQLSecinc
-
-		err := rows.Scan(&tempResult.Secid, &tempResult.ReporterFirstName, &tempResult.ReporterLastName, &tempResult.ReporterEmail,
-			&tempResult.ReporterTelNo, &tempResult.ReportedAsset, &tempResult.ReportedService, &tempResult.ReportedDate, &tempResult.ShortInitDesc,
-			&tempResult.LongInitDesc, &tempResult.ExtTicketID, &tempResult.StillOpen, &tempResult.ClosedDate)
-
-		e(err)
-
-		ResultList = append(ResultList, tempResult)
-	}
-
-	tmpl, err := template.ParseFiles(Staticpath + "/templates/resultsecinc.tmpl")
-	e(err)
-	err = tmpl.Execute(w, ResultList)
-	e(err)
-}
+// SecincidentResults queries the database for security incidents
+func SecincidentResult(w http.ResponseWriter, r *http.Request) {}
