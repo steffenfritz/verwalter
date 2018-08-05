@@ -62,7 +62,9 @@ func SaveSecincident(w http.ResponseWriter, r *http.Request) {
 	sqlStmt, err := db.Prepare("insert into secincident values(?,?,?,?,?,?,?,?,?,?,?,?,?)")
 	e(err)
 
-	_, err = sqlStmt.Exec(nil, s.reporterFirstName, s.reporterLastName, s.reporterEmail, s.reporterTelNo, s.reportedAsset, s.reportedService, s.reportedDate, s.shortInitDesc, s.longInitDesc, s.extTicketID, s.stillOpen, s.closedDate)
+	_, err = sqlStmt.Exec(nil, s.reporterFirstName, s.reporterLastName, s.reporterEmail, s.reporterTelNo,
+		s.reportedAsset, s.reportedService, s.reportedDate, s.shortInitDesc, s.longInitDesc, s.extTicketID,
+		s.stillOpen, s.closedDate)
 
 	Result := ""
 	if err != nil {
@@ -79,5 +81,5 @@ func SaveSecincident(w http.ResponseWriter, r *http.Request) {
 // SearchSecincident searches security incidents
 func SearchSecincident(w http.ResponseWriter, r *http.Request) {}
 
-// SecincidentResults queries the database for security incidents
+// SecincidentResult queries the database for security incidents
 func SecincidentResult(w http.ResponseWriter, r *http.Request) {}

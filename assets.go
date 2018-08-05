@@ -23,6 +23,9 @@ type Asset struct {
 	validTo      string
 	location     string
 	responsible  int
+	serialnumber string
+	tagid        string
+	assettype    string
 }
 
 // SQLAsset is used to unmarshal sql queries with possible null values
@@ -41,6 +44,9 @@ type SQLAsset struct {
 	validTo      sql.NullString
 	location     sql.NullString
 	responsible  sql.NullInt64
+	Serialnumber sql.NullString
+	TagID        sql.NullString
+	AssetType    sql.NullString
 }
 
 // Assets handles requests to assets
@@ -77,11 +83,14 @@ func SaveAsset(w http.ResponseWriter, r *http.Request) {
 	a.validFrom = r.Form.Get("avalidFrom")
 	a.validTo = r.Form.Get("avalidTo")
 	a.location = r.Form.Get("alocation")
+	a.serialnumber = r.Form.Get("aserialnumber")
+	a.tagid = r.Form.Get("atagid")
 
-	sqlStmt, err := db.Prepare("insert into assets values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
+	sqlStmt, err := db.Prepare("insert into assets values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
 	e(err)
 
-	_, err = sqlStmt.Exec(nil, a.descname, a.address, a.hostname, a.purpose, a.os, a.osversion, a.lastosupdate, a.zone, a.active, a.validFrom, a.validTo, a.location, 0)
+	_, err = sqlStmt.Exec(nil, a.descname, a.address, a.hostname, a.purpose, a.os, a.osversion,
+		a.lastosupdate, a.zone, a.active, a.validFrom, a.validTo, a.location, 0, a.serialnumber, a.tagid)
 	e(err)
 
 	Result := ""

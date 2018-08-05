@@ -82,10 +82,32 @@ func createDB(homedir string) {
 		validTo TEXT,
 		location TEXT,
 		responsible INTEGER,
-		  FOREIGN KEY (responsible) REFERENCES functions(id)
+		serialnumber TEXT,
+		tagid TEXT,
+		assettype INTEGER,
+		  FOREIGN KEY (responsible) REFERENCES functions(id),
+		  FOREIGN KEY (assettype) REFERENCES assettypes(id)
 	);`
 	_, err = db.Exec(sqlStmt)
 	e(err)
+
+	// assettype table
+	sqlStmt = `create table assettypes(id INTEGER NOT NULL PRIMARY KEY,
+		assettype TEXT UNIQUE NOT NULL,
+		descname TEXT,
+		active INTEGER,
+		validFrom TEXT,
+		validTo TEXT
+	);`
+	_, err = db.Exec(sqlStmt)
+	e(err)
+
+	// supplier table
+
+	sqlStmt = `create table supplier(id INTEGER NOT NULL PRIMARY KEY,
+		suppliername TEXT,
+
+		) `
 
 	// services is for network services
 	sqlStmt = `create table services(id INTEGER NOT NULL PRIMARY KEY, 
@@ -310,7 +332,23 @@ func createDB(homedir string) {
 	_, err = db.Exec(sqlStmt)
 	e(err)
 
+	// software provider - nsrl format
+	sqlStmt = ``
+
 	// SET DEFAULT VALUES
+	// assettype table
+	//	sqlStmt = `create table assettypes(id INTEGER NOT NULL PRIMARY KEY,
+	//		assettype TEXT UNIQUE NOT NULL,
+	//		descname TEXT,
+	//		active INTEGER,
+	//		validFrom TEXT,
+	//		validTo TEXT
+	//	)'
+
+	sqlStmt = `insert into assettypes
+	(),
+	()`
+
 	// DEFAULT ZONE VALUES
 	sqlStmt = `insert into zones values
 		(null, 'INTERNET', 'Public Internet', '', '', ''),
