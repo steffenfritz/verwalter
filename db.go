@@ -103,20 +103,36 @@ func createDB(homedir string) {
 	e(err)
 
 	// supplier table
-
 	sqlStmt = `create table supplier(id INTEGER NOT NULL PRIMARY KEY,
 		suppliername TEXT,
+		validFrom TEXT,
+		validTo TEXT,
+		contact INTEGER,
+		  FOREIGN KEY(contact) REFERENCES persons(id)
 
-		) `
+		);`
+	_, err = db.Exec(sqlStmt)
+	e(err)
 
-	// services is for network services
+	// services table
 	sqlStmt = `create table services(id INTEGER NOT NULL PRIMARY KEY, 
 		servicename TEXT,
 		application TEXT,
 		port INTEGER,
+		criticality TEXT,
 		license INTEGER,
 		  FOREIGN KEY(license) REFERENCES licenses(id)
 	);`
+	_, err = db.Exec(sqlStmt)
+	e(err)
+
+	// supplierProvides table
+	sqlStmt = `create table supplierProvides(id INTEGER NOT NULL PRIMARY KEY,
+		supplierID INTEGER,
+		serviceID INTEGER,
+		  FOREIGN KEY(supplierID) REFERENCES supplier(id),
+		  FOREIGN KEY(serviceID) REFERENCES services(id)
+		);`
 	_, err = db.Exec(sqlStmt)
 	e(err)
 
@@ -332,9 +348,6 @@ func createDB(homedir string) {
 	_, err = db.Exec(sqlStmt)
 	e(err)
 
-	// software provider - nsrl format
-	sqlStmt = ``
-
 	// SET DEFAULT VALUES
 	// assettype table
 	//	sqlStmt = `create table assettypes(id INTEGER NOT NULL PRIMARY KEY,
@@ -378,11 +391,11 @@ func createDB(homedir string) {
 
 	// DEFAULT SERVICES
 	sqlStmt = `insert into services values
-		(null, 'ssh', 'openssh', 22, 0),
-		(null, 'smtp', 'postfix', 25, 5),
-		(null, 'httpd', 'Apache httpd', 80, 1),
-		(null, 'imap', 'postfix', 143, 5),
-		(null, 'application server', 'Tomcat', 8080, 1)`
+		(null, 'ssh', 'openssh', 22, 'H', 0),
+		(null, 'smtp', 'postfix', 25, 'M', 5),
+		(null, 'httpd', 'Apache httpd', 80, 'M', 1),
+		(null, 'imap', 'postfix', 143, 'L', 5),
+		(null, 'application server', 'Tomcat', 8080, 'M', 1)`
 
 	_, err = db.Exec(sqlStmt)
 	e(err)
