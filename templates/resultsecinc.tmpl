@@ -18,13 +18,15 @@
         </ul> 
 
         <ul>
+
             <li><a href="addsecincident">Add Security Incident</a></li>
             <li><a href="searchsecincident">Search Security Incident</a></li>
+
         </ul>
             <br>
 
         {{ range . }}
-            {{.Secid}}
+            {{.id}}
         {{ end }}
 
         </div>

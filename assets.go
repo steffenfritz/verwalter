@@ -85,12 +85,13 @@ func SaveAsset(w http.ResponseWriter, r *http.Request) {
 	a.location = r.Form.Get("alocation")
 	a.serialnumber = r.Form.Get("aserialnumber")
 	a.tagid = r.Form.Get("atagid")
+	a.assettype = r.Form.Get("aassettype")
 
-	sqlStmt, err := db.Prepare("insert into assets values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
+	sqlStmt, err := db.Prepare("insert into assets values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
 	e(err)
 
 	_, err = sqlStmt.Exec(nil, a.descname, a.address, a.hostname, a.purpose, a.os, a.osversion,
-		a.lastosupdate, a.zone, a.active, a.validFrom, a.validTo, a.location, 0, a.serialnumber, a.tagid)
+		a.lastosupdate, a.zone, a.active, a.validFrom, a.validTo, a.location, 0, a.serialnumber, a.tagid, a.assettype)
 	e(err)
 
 	Result := ""
@@ -132,7 +133,7 @@ func AssetResult(w http.ResponseWriter, r *http.Request) {
 		err := rows.Scan(&tempResult.Assetid, &tempResult.Descname, &tempResult.address, &tempResult.hostname,
 			&tempResult.purpose, &tempResult.os, &tempResult.osversion, &tempResult.lastosupdate,
 			&tempResult.zone, &tempResult.active, &tempResult.validFrom, &tempResult.validTo,
-			&tempResult.location, &tempResult.responsible)
+			&tempResult.location, &tempResult.responsible, &tempResult.Serialnumber, &tempResult.TagID, &tempResult.AssetType)
 
 		e(err)
 
