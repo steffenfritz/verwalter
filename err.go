@@ -1,4 +1,3 @@
-// err.go provides some not so best practice yet handy error sugars
 package main
 
 import "log"
