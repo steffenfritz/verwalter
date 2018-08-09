@@ -20,33 +20,36 @@
 
         <fieldset>
             <form action="saveasset" method="post">
-                Descriptive Name: <input type="text" name="aname">
-                Asset Type: <input type="text" name="aassettype">
-                Purpose: <input type="text" name="apurpose">
-                Address: <input type="text" name="aaddress">
-                Hostname: <input type="text" name="ahostname">
+                <details>
+                  <summar>General Information</summary>
+                   Descriptive Name: <input type="text" name="aname">
+                   Asset Type: <input type="text" name="aassettype">
+                   Purpose: <input type="text" name="apurpose">
+                   Address: <input type="text" name="aaddress">
+                   Zone of asset: <input type="text" name="azone">
+                   Hostname: <input type="text" name="ahostname">
+                   Responsible Department: <input type="text" name="aresp"><br>
+                </details>
                 <details>
                   <summary>Operating System</summary>
                     Operating System: <input type="text" name="aos"><br>
                     OS Version: <input type="text" name="aosversion">
                     Last OS Update: <input type="text" name="aosupdate">
                 </details>
-                Location: <input type="text" name="alocation">
-                Serial Number: <input type="text" name="aserialnumber">
-                Tag ID: <input type="text" name="atagid">
-                Zone of asset: <input type="text" name="azone">
-                Responsible Department: <input type="text" name="aresp"><br>
+                <details>
+                  <summary>Metadata</summary>
+                    Location: <input type="text" name="alocation">
+                    Serial Number: <input type="text" name="aserialnumber">
+                    Tag ID: <input type="text" name="atagid">
+                </details>
                 <details>
                   <summary>Status</summary>
-                    Active: <input type="text" name="aactive">
+                    Active: <input type="checkbox" name="aactive" value="true">
                     Valid From: <input type="text" name="avalidFrom" value={{.}}>
                     Valid To: <input type="text" name="avalidTo" value="2100-01-01">
                 </details>
                 <input type="submit" value="Save">
             </form> 
-        </fieldset>
-        <fieldset>
-            test
         </fieldset>
     </div>
     </body>
