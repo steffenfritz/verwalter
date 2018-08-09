@@ -1,4 +1,3 @@
-// db.go is the source file for database related stuff
 package main
 
 import (
