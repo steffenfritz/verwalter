@@ -22,11 +22,19 @@
             <li><a href="searchasset">Search Asset</a></li>
         </ul>
             <br>
-
+        <table>
         {{ range . }}
-            {{.Assetid}}
+        <tr>
+            <td>{{ .Assetid.String }}</td> 
+            <td>{{ .Hostname.String }}</td> 
+            <td> {{ .Address.String }}</td> 
+            <td>{{ .Os.String }}</td> 
+            <td><a href="LINK">Persons Associated</a></td>
+            <td> <a href="LINK">Zone Members</a></td>
+        </tr>
         {{ end }}
-
+        </table>
+        
         </div>
     </body>
 </html>

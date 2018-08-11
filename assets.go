@@ -32,18 +32,18 @@ type Asset struct {
 type SQLAsset struct {
 	Assetid      sql.NullString
 	Descname     sql.NullString
-	address      sql.NullString
-	hostname     sql.NullString
-	purpose      sql.NullString
-	os           sql.NullString
-	osversion    sql.NullString
-	lastosupdate sql.NullString
-	zone         sql.NullString
-	active       sql.NullString
-	validFrom    sql.NullString
-	validTo      sql.NullString
-	location     sql.NullString
-	responsible  sql.NullInt64
+	Address      sql.NullString
+	Hostname     sql.NullString
+	Purpose      sql.NullString
+	Os           sql.NullString
+	Osversion    sql.NullString
+	Lastosupdate sql.NullString
+	Zone         sql.NullString
+	Active       sql.NullString
+	ValidFrom    sql.NullString
+	ValidTo      sql.NullString
+	Location     sql.NullString
+	Responsible  sql.NullInt64
 	Serialnumber sql.NullString
 	TagID        sql.NullString
 	AssetType    sql.NullString
@@ -130,10 +130,10 @@ func AssetResult(w http.ResponseWriter, r *http.Request) {
 	var ResultList []SQLAsset
 	for rows.Next() {
 		var tempResult SQLAsset
-		err := rows.Scan(&tempResult.Assetid, &tempResult.Descname, &tempResult.address, &tempResult.hostname,
-			&tempResult.purpose, &tempResult.os, &tempResult.osversion, &tempResult.lastosupdate,
-			&tempResult.zone, &tempResult.active, &tempResult.validFrom, &tempResult.validTo,
-			&tempResult.location, &tempResult.responsible, &tempResult.Serialnumber, &tempResult.TagID, &tempResult.AssetType)
+		err := rows.Scan(&tempResult.Assetid, &tempResult.Descname, &tempResult.Address, &tempResult.Hostname,
+			&tempResult.Purpose, &tempResult.Os, &tempResult.Osversion, &tempResult.Lastosupdate,
+			&tempResult.Zone, &tempResult.Active, &tempResult.ValidFrom, &tempResult.ValidTo,
+			&tempResult.Location, &tempResult.Responsible, &tempResult.Serialnumber, &tempResult.TagID, &tempResult.AssetType)
 
 		e(err)
 
