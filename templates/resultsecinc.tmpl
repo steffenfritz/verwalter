@@ -27,7 +27,13 @@
         <table>
         {{ range . }}
         <tr>
-            <td>{{.}}</td>
+            <td>{{.SecincID.String}}</td>
+            <td>{{.ReportedAsset.String}}</td>
+            <td>{{.ReportedService.String}}</td>
+            <td>{{.ReportedService.String}}</td>
+            <td>{{.ReportedDate.String}}</td>
+            <td>{{.ShortInitDesc.String}}</td>
+            <td>{{.StillOpen.String}}</td>
          </tr>
         {{ end }}
         </table>

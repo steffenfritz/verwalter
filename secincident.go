@@ -28,18 +28,18 @@ type Secinc struct {
 // SQLSecinc is used to unmarshal sql queries with possible null values
 type SQLSecinc struct {
 	SecincID          sql.NullString
-	reporterFirstName sql.NullString
-	reporterLastName  sql.NullString
-	reporterEmail     sql.NullString
-	reporterTelNo     sql.NullString
-	reportedAsset     sql.NullString
-	reportedService   sql.NullString
-	reportedDate      sql.NullString
-	shortInitDesc     sql.NullString
-	longInitDesc      sql.NullString
-	extTicketID       sql.NullString
-	stillOpen         sql.NullString
-	closedDate        sql.NullString
+	ReporterFirstName sql.NullString
+	ReporterLastName  sql.NullString
+	ReporterEmail     sql.NullString
+	ReporterTelNo     sql.NullString
+	ReportedAsset     sql.NullString
+	ReportedService   sql.NullString
+	ReportedDate      sql.NullString
+	ShortInitDesc     sql.NullString
+	LongInitDesc      sql.NullString
+	ExtTicketID       sql.NullString
+	StillOpen         sql.NullString
+	ClosedDate        sql.NullString
 }
 
 // Secincident handles requests to secincident
@@ -120,10 +120,10 @@ func SecincidentResult(w http.ResponseWriter, r *http.Request) {
 	var ResultList []SQLSecinc
 	for rows.Next() {
 		var tempResult SQLSecinc
-		err := rows.Scan(&tempResult.SecincID, &tempResult.reporterFirstName, &tempResult.reporterLastName,
-			&tempResult.reporterEmail, &tempResult.reporterTelNo, &tempResult.reportedAsset, &tempResult.reportedService,
-			&tempResult.reportedDate, &tempResult.shortInitDesc, &tempResult.longInitDesc,
-			&tempResult.extTicketID, &tempResult.stillOpen, &tempResult.closedDate)
+		err := rows.Scan(&tempResult.SecincID, &tempResult.ReporterFirstName, &tempResult.ReporterLastName,
+			&tempResult.ReporterEmail, &tempResult.ReporterTelNo, &tempResult.ReportedAsset, &tempResult.ReportedService,
+			&tempResult.ReportedDate, &tempResult.ShortInitDesc, &tempResult.LongInitDesc,
+			&tempResult.ExtTicketID, &tempResult.StillOpen, &tempResult.ClosedDate)
 
 		e(err)
 

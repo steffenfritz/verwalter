@@ -98,6 +98,11 @@ input {
     color: #f1f1f1;
 }
 
+
+.tr:hover {
+    background-color: #00bfff;
+}
+
 /* Style page content */
 .main {
     margin-left: 160px; /* Same as the width of the sidebar */
