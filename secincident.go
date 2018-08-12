@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"html/template"
 	"net/http"
 	"time"
@@ -22,6 +23,23 @@ type Secinc struct {
 	extTicketID       string
 	stillOpen         string
 	closedDate        string
+}
+
+// SQLSecinc is used to unmarshal sql queries with possible null values
+type SQLSecinc struct {
+	SecincID          sql.NullString
+	reporterFirstName sql.NullString
+	reporterLastName  sql.NullString
+	reporterEmail     sql.NullString
+	reporterTelNo     sql.NullString
+	reportedAsset     sql.NullString
+	reportedService   sql.NullString
+	reportedDate      sql.NullString
+	shortInitDesc     sql.NullString
+	longInitDesc      sql.NullString
+	extTicketID       sql.NullString
+	stillOpen         sql.NullString
+	closedDate        sql.NullString
 }
 
 // Secincident handles requests to secincident
@@ -79,7 +97,42 @@ func SaveSecincident(w http.ResponseWriter, r *http.Request) {
 }
 
 // SearchSecincident searches security incidents
-func SearchSecincident(w http.ResponseWriter, r *http.Request) {}
+func SearchSecincident(w http.ResponseWriter, r *http.Request) {
+	tmpl, err := template.ParseFiles(Staticpath + "/templates/searchsecinc.tmpl")
+	e(err)
+	tmpl.Execute(w, "")
+}
 
 // SecincidentResult queries the database for security incidents
-func SecincidentResult(w http.ResponseWriter, r *http.Request) {}
+func SecincidentResult(w http.ResponseWriter, r *http.Request) {
+	keys := r.URL.Query()
+	qKeys := map[string]string{"asset": "%", "secincservice": "%", "open": "%"}
+
+	for key, value := range keys {
+		if len(value[0]) != 0 {
+			qKeys[key] = value[0]
+		}
+	}
+
+	rows, err := db.Query("SELECT * FROM secincident WHERE (COALESCE(reportedAsset, '') LIKE ?) AND (COALESCE(reportedService, '') LIKE ?) AND (COALESCE(stillOpen,'') LIKE ?)", qKeys["asset"], qKeys["secincservice"], qKeys["open"])
+	e(err)
+	defer rows.Close()
+	var ResultList []SQLSecinc
+	for rows.Next() {
+		var tempResult SQLSecinc
+		err := rows.Scan(&tempResult.SecincID, &tempResult.reporterFirstName, &tempResult.reporterLastName,
+			&tempResult.reporterEmail, &tempResult.reporterTelNo, &tempResult.reportedAsset, &tempResult.reportedService,
+			&tempResult.reportedDate, &tempResult.shortInitDesc, &tempResult.longInitDesc,
+			&tempResult.extTicketID, &tempResult.stillOpen, &tempResult.closedDate)
+
+		e(err)
+
+		ResultList = append(ResultList, tempResult)
+	}
+
+	tmpl, err := template.ParseFiles(Staticpath + "/templates/resultsecinc.tmpl")
+	e(err)
+	err = tmpl.Execute(w, ResultList)
+	e(err)
+
+}

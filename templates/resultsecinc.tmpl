@@ -24,11 +24,13 @@
 
         </ul>
             <br>
-
+        <table>
         {{ range . }}
-            {{.id}}
+        <tr>
+            <td>{{.}}</td>
+         </tr>
         {{ end }}
-
+        </table>
         </div>
     </body>
 </html>

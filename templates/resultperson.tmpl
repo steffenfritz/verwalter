@@ -22,11 +22,15 @@
             <li><a href="searchperson">Search Person</a></li>
         </ul>
             <br>
-
-        {{ range . }}
-            {{.Personid}}
-        {{ end }}
-
+        <table>
+            {{ range . }}
+            <tr>
+                <td>{{.Personid}}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            {{ end }}
+        </table>
         </div>
     </body>
 </html>

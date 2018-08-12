@@ -22,11 +22,12 @@
             <li><a href="searchzone">Search Zone</a></li>
         </ul>
             <br>
-
+        <table>
         {{ range . }}
-            {{.Zoneid}}
+            <tr>
+                <td>{{.Zoneid.String}}</td>
         {{ end }}
-
+        </table>
         </div>
     </body>
 </html>
