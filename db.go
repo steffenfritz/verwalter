@@ -90,6 +90,41 @@ func createDB(homedir string) {
 	_, err = db.Exec(sqlStmt)
 	e(err)
 
+	// media assets
+	sqlStmt = `create table mediaassets(id INTEGER NOT NULL PRIMARY KEY,
+		descname TEXT,
+		title TEXT,
+		creator TEXT,
+		author INT,
+		lang TEXT,
+		location INT,
+		contentdesc TEXT,
+		  FOREIGN KEY (author) REFERENCES persons(id),
+		  FOREIGN KEY (location) REFERENCES location(id)
+		);`
+	_, err = db.Exec(sqlStmt)
+	e(err)
+
+	// location table
+	sqlStmt = `create table location(id INTEGER NOT NULL PRIMARY KEY,
+		descname TEXT,
+		continent TEXT,
+		country TEXT,
+		state TEXT,
+		city TEXT,
+		street TEXT,
+		number TEXT,
+		addition TEXT,
+		floor TEXT,
+		bureau TEXT,
+		room TEXT,
+		rack TEXT,
+		latitude FLOAT,
+		longitude FLOAT		
+		);`
+	_, err = db.Exec(sqlStmt)
+	e(err)
+
 	// assettype table
 	sqlStmt = `create table assettypes(id INTEGER NOT NULL PRIMARY KEY,
 		assettype TEXT UNIQUE NOT NULL,
@@ -108,7 +143,6 @@ func createDB(homedir string) {
 		validTo TEXT,
 		contact INTEGER,
 		  FOREIGN KEY(contact) REFERENCES persons(id)
-
 		);`
 	_, err = db.Exec(sqlStmt)
 	e(err)
