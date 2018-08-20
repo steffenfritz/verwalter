@@ -16,9 +16,16 @@
            <li><a href="processes">Processes</a></li>
            <li><a href="reports">Reports</a></li>
         </ul> 
+        <table>
+          
+            <tr><td>Maximum Password Age in Days: {{ .TFP.PasswordAgeFactor }}</td></tr>
+            <tr><td>Maximum Vuln Info Age in Days: {{ .TFP.VulnAgeFactorInfo }}</td></tr>
+            <tr><td>Maximum Vuln Low Age in Days: {{ .TFP.VulnAgeFactorLow }}</td></tr>
+            <tr><td>Maximum Vuln Medium Age in Days: {{ .TFP.VulnAgeFactorMedium }}</td></tr>
+            <tr><td>Maximum Vuln High Age in Days: {{ .TFP.VulnAgeFactorHigh }}</td></tr>
+            <tr><td>Maximum Security Incident Age in Days: {{ .TFP.SecincidentAgeFactor }}</td></tr>
 
-         Maximum Password Age in Days: {{ .TFP.PasswordAgeFactor }}
-
+        </table>
         </div>
     </body>
 </html>
