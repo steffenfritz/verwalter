@@ -325,6 +325,7 @@ func createDB(homedir string) {
 		foundDate TEXT,
 		workaroundDate TEXT,
 		fixedDate TEXT,
+		
 		  FOREIGN KEY (host_service_id) REFERENCES host_service(id)
 	);`
 	_, err = db.Exec(sqlStmt)
