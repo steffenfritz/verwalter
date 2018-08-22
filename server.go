@@ -93,10 +93,3 @@ func Processes(w http.ResponseWriter, r *http.Request) {
 	e(err)
 	tmpl.Execute(w, "")
 }
-
-// Reports handles requests to reports
-func Reports(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles(Staticpath + "/templates/reports.tmpl")
-	e(err)
-	tmpl.Execute(w, "")
-}
