@@ -19,12 +19,11 @@
 
         <h1>ToDo</h1>
         <table> 
-            <tr><td>Open Security Incidents</td><td>{{ . }}</td> </tr>
-            <tr><td>Open Vulnerables</td><td></td> </tr>
-            <tr><td>Total Assets</td><td></td> </tr>
-            <tr><td>Total Persons</td><td></td> </tr>
-            <tr><td>Oldest update date</td><td></td> </tr>
-            <tr><td>Oldest update count</td><td></td> </tr>
+            <tr><td>Open Security Incidents</td><td>{{ .SecIncCountOpen }}</td> </tr>
+            <tr><td>Open Vulnerables</td><td>{{ .VulnCountOpen }}</td> </tr>
+            <tr><td>Total Assets</td><td>{{ .AssetCountActive }}</td> </tr>
+            <tr><td>Total Persons</td><td>{{ .PersonsCountActive }}</td> </tr>
+            <tr><td>Oldest update date</td><td> {{ .OldestUpdate }}</td> </tr>
         </table>
         </div>
     </body>
